@@ -62,3 +62,5 @@ src/
 - Vite
 - CSS3
 
+<img width="1068" height="490" alt="image" src="https://github.com/user-attachments/assets/a98c4e53-368b-4dcf-a7f9-2fbd74c9cfa0" />
+
