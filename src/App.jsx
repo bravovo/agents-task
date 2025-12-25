@@ -4,16 +4,19 @@ import TodoList from './components/TodoList'
 function App() {
   const [todos, setTodos] = useState([])
   const [inputValue, setInputValue] = useState('')
+  const [category, setCategory] = useState('medium')
 
   const handleSubmit = (e) => {
     e.preventDefault()
     if (inputValue.trim() !== '') {
       const newTodo = {
         id: Date.now(),
-        text: inputValue.trim()
+        text: inputValue.trim(),
+        category: category
       }
       setTodos([...todos, newTodo])
       setInputValue('')
+      setCategory('medium')
     }
   }
 
@@ -33,6 +36,16 @@ function App() {
             placeholder="Add a new todo..."
             className="todo-input"
           />
+          <select
+            value={category}
+            onChange={(e) => setCategory(e.target.value)}
+            className="category-select"
+          >
+            <option value="critical">Critical</option>
+            <option value="high">High</option>
+            <option value="medium">Medium</option>
+            <option value="low">Low</option>
+          </select>
           <button type="submit" className="submit-button">
             Add Todo
           </button>
