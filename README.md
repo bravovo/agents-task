@@ -1,3 +1,6 @@
+<img width="791" height="819" alt="image" src="https://github.com/user-attachments/assets/c9ad4867-0801-4a52-adc0-6d587089f2db" />
+
+
 # Todo List App
 
 A simple todo list application built with React.js and Vite, featuring a clean white and beige color theme.
