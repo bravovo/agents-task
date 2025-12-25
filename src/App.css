@@ -41,26 +41,62 @@ h1 {
 
 .todo-form {
   display: flex;
-  gap: 0.75rem;
+  flex-direction: column;
+  gap: 1rem;
   margin-bottom: 2rem;
-  flex-wrap: wrap;
 }
 
-.category-select {
-  padding: 0.75rem 1rem;
-  border: 2px solid #E8E8D3;
+.category-selection {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1rem;
+  background-color: #FAFAFA;
   border-radius: 4px;
-  font-size: 1rem;
-  background-color: #FFFFFF;
-  color: #333;
-  cursor: pointer;
-  transition: border-color 0.2s;
-  min-width: 120px;
+  border: 1px solid #E8E8D3;
 }
 
-.category-select:focus {
-  outline: none;
-  border-color: #D4C4A8;
+.category-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.category-group-label {
+  font-weight: 600;
+  color: #8B7355;
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.category-checkboxes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.category-checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  font-size: 0.875rem;
+  color: #333;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+.category-checkbox-label:hover {
+  background-color: #F0F0F0;
+}
+
+.category-checkbox {
+  cursor: pointer;
+  width: 16px;
+  height: 16px;
+  accent-color: #D4C4A8;
 }
 
 .todo-input {
@@ -137,6 +173,13 @@ h1 {
   word-break: break-word;
 }
 
+.category-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
 .category-badge {
   display: inline-block;
   padding: 0.25rem 0.75rem;
@@ -147,6 +190,7 @@ h1 {
   width: fit-content;
 }
 
+/* Priority categories */
 .category-critical {
   background-color: #DC3545;
   color: #FFFFFF;
@@ -164,6 +208,48 @@ h1 {
 
 .category-low {
   background-color: #4CAF50;
+  color: #FFFFFF;
+}
+
+/* Time-based categories */
+.category-urgent {
+  background-color: #E91E63;
+  color: #FFFFFF;
+}
+
+.category-today {
+  background-color: #2196F3;
+  color: #FFFFFF;
+}
+
+.category-this-week {
+  background-color: #00BCD4;
+  color: #FFFFFF;
+}
+
+.category-later {
+  background-color: #9E9E9E;
+  color: #FFFFFF;
+}
+
+/* Progress-based categories */
+.category-not-started {
+  background-color: #757575;
+  color: #FFFFFF;
+}
+
+.category-in-progress {
+  background-color: #FF9800;
+  color: #FFFFFF;
+}
+
+.category-completed {
+  background-color: #4CAF50;
+  color: #FFFFFF;
+}
+
+.category-blocked {
+  background-color: #F44336;
   color: #FFFFFF;
 }
 
@@ -212,8 +298,8 @@ h1 {
     flex-direction: column;
   }
 
-  .category-select {
-    width: 100%;
+  .category-checkboxes {
+    flex-direction: column;
   }
 
   .submit-button {
