@@ -11,7 +11,12 @@ function TodoList({ todos, onDelete }) {
     <ul className="todo-list">
       {todos.map(todo => (
         <li key={todo.id} className="todo-item">
-          <span className="todo-text">{todo.text}</span>
+          <div className="todo-content">
+            <span className="todo-text">{todo.text}</span>
+            <span className={`category-badge category-${todo.category || 'medium'}`}>
+              {todo.category || 'medium'}
+            </span>
+          </div>
           <button
             onClick={() => onDelete(todo.id)}
             className="delete-button"
