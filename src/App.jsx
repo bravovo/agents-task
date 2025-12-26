@@ -1,5 +1,31 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import TodoList from './components/TodoList'
+
+// LocalStorage keys
+const STORAGE_KEYS = {
+  TODOS: 'todos',
+  ARCHIVED_TODOS: 'archivedTodos'
+}
+
+// Helper function to load from localStorage
+const loadFromStorage = (key, defaultValue = []) => {
+  try {
+    const item = localStorage.getItem(key)
+    return item ? JSON.parse(item) : defaultValue
+  } catch (error) {
+    console.error(`Error loading ${key} from localStorage:`, error)
+    return defaultValue
+  }
+}
+
+// Helper function to save to localStorage
+const saveToStorage = (key, value) => {
+  try {
+    localStorage.setItem(key, JSON.stringify(value))
+  } catch (error) {
+    console.error(`Error saving ${key} to localStorage:`, error)
+  }
+}
 
 // Category definitions organized by type
 const CATEGORIES = {
@@ -23,9 +49,22 @@ const CATEGORIES = {
 }
 
 function App() {
-  const [todos, setTodos] = useState([])
+  // Initialize state from localStorage
+  const [todos, setTodos] = useState(() => loadFromStorage(STORAGE_KEYS.TODOS))
+  const [archivedTodos, setArchivedTodos] = useState(() => loadFromStorage(STORAGE_KEYS.ARCHIVED_TODOS))
+  const [activeView, setActiveView] = useState('active') // 'active' or 'archive'
   const [inputValue, setInputValue] = useState('')
   const [selectedCategories, setSelectedCategories] = useState(['medium'])
+
+  // Save todos to localStorage whenever they change
+  useEffect(() => {
+    saveToStorage(STORAGE_KEYS.TODOS, todos)
+  }, [todos])
+
+  // Save archivedTodos to localStorage whenever they change
+  useEffect(() => {
+    saveToStorage(STORAGE_KEYS.ARCHIVED_TODOS, archivedTodos)
+  }, [archivedTodos])
 
   // Helper function to get the category type for a given category value
   const getCategoryType = (categoryValue) => {
@@ -83,11 +122,47 @@ function App() {
     setTodos(todos.filter(todo => todo.id !== id))
   }
 
+  const handleComplete = (id) => {
+    const todoToComplete = todos.find(todo => todo.id === id)
+    if (todoToComplete) {
+      setArchivedTodos([...archivedTodos, { ...todoToComplete, completedAt: Date.now() }])
+      setTodos(todos.filter(todo => todo.id !== id))
+    }
+  }
+
+  const handleIncomplete = (id) => {
+    const todoToRestore = archivedTodos.find(todo => todo.id === id)
+    if (todoToRestore) {
+      const { completedAt, ...todoWithoutCompletedAt } = todoToRestore
+      setTodos([...todos, todoWithoutCompletedAt])
+      setArchivedTodos(archivedTodos.filter(todo => todo.id !== id))
+    }
+  }
+
+  const handleDeleteFromArchive = (id) => {
+    setArchivedTodos(archivedTodos.filter(todo => todo.id !== id))
+  }
+
   return (
     <div className="app">
       <div className="container">
         <h1>Todo List</h1>
-        <form onSubmit={handleSubmit} className="todo-form">
+        <div className="view-switcher">
+          <button
+            onClick={() => setActiveView('active')}
+            className={`view-button ${activeView === 'active' ? 'active' : ''}`}
+          >
+            Active Todos ({todos.length})
+          </button>
+          <button
+            onClick={() => setActiveView('archive')}
+            className={`view-button ${activeView === 'archive' ? 'active' : ''}`}
+          >
+            Archive ({archivedTodos.length})
+          </button>
+        </div>
+        {activeView === 'active' && (
+          <form onSubmit={handleSubmit} className="todo-form">
           <input
             type="text"
             value={inputValue}
@@ -149,7 +224,22 @@ function App() {
             Add Todo
           </button>
         </form>
-        <TodoList todos={todos} onDelete={handleDelete} />
+        )}
+        {activeView === 'active' ? (
+          <TodoList 
+            todos={todos} 
+            onDelete={handleDelete}
+            onComplete={handleComplete}
+            isArchive={false}
+          />
+        ) : (
+          <TodoList 
+            todos={archivedTodos} 
+            onDelete={handleDeleteFromArchive}
+            onIncomplete={handleIncomplete}
+            isArchive={true}
+          />
+        )}
       </div>
     </div>
   )

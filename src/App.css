@@ -39,6 +39,38 @@ h1 {
   font-size: 2rem;
 }
 
+.view-switcher {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+  border-bottom: 2px solid #E8E8D3;
+}
+
+.view-button {
+  flex: 1;
+  padding: 0.75rem 1rem;
+  background-color: transparent;
+  color: #8B7355;
+  border: none;
+  border-bottom: 3px solid transparent;
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-bottom: -2px;
+}
+
+.view-button:hover {
+  background-color: #FAFAFA;
+  color: #6B5B3D;
+}
+
+.view-button.active {
+  color: #8B7355;
+  border-bottom-color: #D4C4A8;
+  font-weight: 600;
+}
+
 .todo-form {
   display: flex;
   flex-direction: column;
@@ -155,6 +187,12 @@ h1 {
   transition: transform 0.2s, box-shadow 0.2s;
 }
 
+.todo-item.archived {
+  background-color: #F0F0F0;
+  border-left-color: #9E9E9E;
+  opacity: 0.85;
+}
+
 .todo-content {
   display: flex;
   flex-direction: column;
@@ -171,6 +209,11 @@ h1 {
   color: #333;
   font-size: 1rem;
   word-break: break-word;
+}
+
+.todo-text.completed {
+  text-decoration: line-through;
+  color: #666;
 }
 
 .category-badges {
@@ -253,6 +296,52 @@ h1 {
   color: #FFFFFF;
 }
 
+.todo-actions {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.complete-button {
+  padding: 0.5rem 1rem;
+  background-color: #4CAF50;
+  color: #FFFFFF;
+  border: none;
+  border-radius: 4px;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  margin-left: 1rem;
+}
+
+.complete-button:hover {
+  background-color: #45A049;
+}
+
+.complete-button:active {
+  background-color: #3D8B40;
+}
+
+.incomplete-button {
+  padding: 0.5rem 1rem;
+  background-color: #2196F3;
+  color: #FFFFFF;
+  border: none;
+  border-radius: 4px;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  margin-left: 1rem;
+}
+
+.incomplete-button:hover {
+  background-color: #1976D2;
+}
+
+.incomplete-button:active {
+  background-color: #1565C0;
+}
+
 .delete-button {
   padding: 0.5rem 1rem;
   background-color: #E8E8D3;
@@ -262,7 +351,6 @@ h1 {
   font-size: 0.875rem;
   cursor: pointer;
   transition: background-color 0.2s, color 0.2s;
-  margin-left: 1rem;
 }
 
 .delete-button:hover {
@@ -316,6 +404,14 @@ h1 {
     width: 100%;
   }
 
+  .todo-actions {
+    width: 100%;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .complete-button,
+  .incomplete-button,
   .delete-button {
     margin-left: 0;
     width: 100%;
