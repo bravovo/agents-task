@@ -150,15 +150,19 @@ function App() {
   }
 
   const filterTodos = (todoList) => {
+    const searchLower = searchText.toLowerCase().trim()
+    
     return todoList.filter(todo => {
       // Text search filter
-      const matchesSearch = searchText.trim() === '' || 
-        todo.text.toLowerCase().includes(searchText.toLowerCase())
+      const matchesSearch = searchLower === '' || 
+        todo.text.toLowerCase().includes(searchLower)
       
       // Category filters
       const matchesFilters = Object.entries(filterCategories).every(([type, value]) => {
         if (value === 'all') return true
-        return todo.categories && todo.categories[type] === value
+        // Include todos without categories when filtering (they won't match specific values)
+        if (!todo.categories) return false
+        return todo.categories[type] === value
       })
       
       return matchesSearch && matchesFilters
