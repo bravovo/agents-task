@@ -6,6 +6,12 @@ function App() {
   const [inputValue, setInputValue] = useState('')
   const [category, setCategory] = useState('medium')
 
+  const categoryLabels = {
+    high: 'High',
+    medium: 'Medium',
+    low: 'Low'
+  }
+
   const handleSubmit = (e) => {
     e.preventDefault()
     const trimmedValue = inputValue.trim()
@@ -49,7 +55,7 @@ function App() {
           <li key={todo.id} className="todo-item">
             <span className="todo-text">{todo.text}</span>
             <span className={`category-badge category-${todo.category}`}>
-              {todo.category === 'high' ? 'High' : todo.category === 'medium' ? 'Medium' : 'Low'}
+              {categoryLabels[todo.category] || 'Unknown'}
             </span>
             <button
               onClick={() => handleDelete(todo.id)}
