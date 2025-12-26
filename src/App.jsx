@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import './App.css'
 
 const categoryTypes = {
@@ -52,7 +52,16 @@ function App() {
     time: 'all',
     progress: 'all'
   })
-  const [theme, setTheme] = useState('light')
+  const [theme, setTheme] = useState(() => {
+    const savedTheme = localStorage.getItem('todo-app-theme')
+    return savedTheme || 'light'
+  })
+
+  // Persist theme preference and update body class
+  useEffect(() => {
+    localStorage.setItem('todo-app-theme', theme)
+    document.body.className = theme === 'dark' ? 'dark-theme' : ''
+  }, [theme])
 
   const handleSubmit = (e) => {
     e.preventDefault()
