@@ -55,6 +55,9 @@ function App() {
   const [activeView, setActiveView] = useState('active') // 'active' or 'archive'
   const [inputValue, setInputValue] = useState('')
   const [selectedCategories, setSelectedCategories] = useState(['medium'])
+  const [editingId, setEditingId] = useState(null)
+  const [editText, setEditText] = useState('')
+  const [editCategories, setEditCategories] = useState(['medium'])
 
   // Save todos to localStorage whenever they change
   useEffect(() => {
@@ -143,6 +146,29 @@ function App() {
     setArchivedTodos(archivedTodos.filter(todo => todo.id !== id))
   }
 
+  const handleEdit = (id, newText, newCategories) => {
+    setTodos(todos.map(todo => 
+      todo.id === id 
+        ? { ...todo, text: newText.trim(), categories: newCategories }
+        : todo
+    ))
+    setEditingId(null)
+    setEditText('')
+    setEditCategories(['medium'])
+  }
+
+  const handleStartEdit = (todo) => {
+    setEditingId(todo.id)
+    setEditText(todo.text)
+    setEditCategories(todo.categories || (todo.category ? [todo.category] : ['medium']))
+  }
+
+  const handleCancelEdit = () => {
+    setEditingId(null)
+    setEditText('')
+    setEditCategories(['medium'])
+  }
+
   return (
     <div className="app">
       <div className="container">
@@ -225,11 +251,30 @@ function App() {
           </button>
         </form>
         )}
+        <div className="todo-count">
+          {activeView === 'active' ? (
+            <p>{todos.length} uncompleted todo tasks</p>
+          ) : (
+            <p>{archivedTodos.length} completed todo tasks</p>
+          )}
+        </div>
         {activeView === 'active' ? (
           <TodoList 
             todos={todos} 
             onDelete={handleDelete}
             onComplete={handleComplete}
+            onEdit={handleEdit}
+            onStartEdit={handleStartEdit}
+            onCancelEdit={handleCancelEdit}
+            editingId={editingId}
+            editText={editText}
+            editCategories={editCategories}
+            setEditText={setEditText}
+            setEditCategories={setEditCategories}
+            handleCategoryChange={handleCategoryChange}
+            getCategoryType={getCategoryType}
+            getCategoryValuesByType={getCategoryValuesByType}
+            CATEGORIES={CATEGORIES}
             isArchive={false}
           />
         ) : (

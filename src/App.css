@@ -362,6 +362,94 @@ h1 {
   background-color: #C4B498;
 }
 
+.edit-button {
+  padding: 0.5rem 1rem;
+  background-color: #2196F3;
+  color: #FFFFFF;
+  border: none;
+  border-radius: 4px;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  margin-left: 1rem;
+}
+
+.edit-button:hover {
+  background-color: #1976D2;
+}
+
+.edit-button:active {
+  background-color: #1565C0;
+}
+
+.todo-edit-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: 100%;
+}
+
+.edit-actions {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.save-button {
+  padding: 0.5rem 1rem;
+  background-color: #4CAF50;
+  color: #FFFFFF;
+  border: none;
+  border-radius: 4px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.save-button:hover {
+  background-color: #45A049;
+}
+
+.save-button:active {
+  background-color: #3D8B40;
+}
+
+.cancel-button {
+  padding: 0.5rem 1rem;
+  background-color: #E8E8D3;
+  color: #8B7355;
+  border: 1px solid #D4C4A8;
+  border-radius: 4px;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.cancel-button:hover {
+  background-color: #D4C4A8;
+  color: #FFFFFF;
+}
+
+.cancel-button:active {
+  background-color: #C4B498;
+}
+
+.todo-count {
+  margin: 1rem 0;
+  padding: 0.75rem 1rem;
+  background-color: #FAFAFA;
+  border-radius: 4px;
+  border-left: 3px solid #D4C4A8;
+}
+
+.todo-count p {
+  margin: 0;
+  color: #8B7355;
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
 .empty-state {
   text-align: center;
   padding: 3rem 1rem;
@@ -412,8 +500,19 @@ h1 {
 
   .complete-button,
   .incomplete-button,
-  .delete-button {
+  .delete-button,
+  .edit-button {
     margin-left: 0;
+    width: 100%;
+  }
+
+  .edit-actions {
+    width: 100%;
+    flex-direction: column;
+  }
+
+  .save-button,
+  .cancel-button {
     width: 100%;
   }
 }
