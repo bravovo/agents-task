@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import './App.css'
 
 const categoryTypes = {
@@ -46,6 +46,22 @@ function App() {
     time: 'today',
     progress: 'not-started'
   })
+  const [searchText, setSearchText] = useState('')
+  const [filterCategories, setFilterCategories] = useState({
+    priority: 'all',
+    time: 'all',
+    progress: 'all'
+  })
+  const [theme, setTheme] = useState(() => {
+    const savedTheme = localStorage.getItem('todo-app-theme')
+    return savedTheme || 'light'
+  })
+
+  // Persist theme preference and update body class
+  useEffect(() => {
+    localStorage.setItem('todo-app-theme', theme)
+    document.body.className = theme === 'dark' ? 'dark-theme' : ''
+  }, [theme])
 
   const handleSubmit = (e) => {
     e.preventDefault()
@@ -136,9 +152,48 @@ function App() {
     })
   }
 
+  const handleFilterCategoryChange = (type, value) => {
+    setFilterCategories({
+      ...filterCategories,
+      [type]: value
+    })
+  }
+
+  const filterTodos = (todoList) => {
+    const searchLower = searchText.toLowerCase().trim()
+    
+    return todoList.filter(todo => {
+      // Text search filter
+      const matchesSearch = searchLower === '' || 
+        todo.text.toLowerCase().includes(searchLower)
+      
+      // Category filters
+      const matchesFilters = Object.entries(filterCategories).every(([type, value]) => {
+        if (value === 'all') return true
+        // Include todos without categories when filtering (they won't match specific values)
+        if (!todo.categories) return false
+        return todo.categories[type] === value
+      })
+      
+      return matchesSearch && matchesFilters
+    })
+  }
+
+  const filteredTodos = filterTodos(todos)
+  const filteredArchive = filterTodos(archive)
+
   return (
-    <div className="app">
-      <h1>Todo App</h1>
+    <div className={`app ${theme}`}>
+      <div className="header-with-theme">
+        <h1>Todo App</h1>
+        <button 
+          className="theme-toggle"
+          onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}
+          aria-label="Toggle theme"
+        >
+          {theme === 'light' ? '🌙' : '☀️'}
+        </button>
+      </div>
       <div className="view-toggle">
         <button 
           className={`toggle-button ${!showArchive ? 'active' : ''}`}
@@ -152,6 +207,37 @@ function App() {
         >
           Archive ({archive.length})
         </button>
+      </div>
+      <div className="search-filter-section">
+        <input
+          type="text"
+          value={searchText}
+          onChange={(e) => setSearchText(e.target.value)}
+          placeholder="Search todos..."
+          className="search-input"
+        />
+        <div className="filter-controls">
+          {Object.entries(categoryTypes).map(([type, config]) => (
+            <div key={type} className="filter-group">
+              <label htmlFor={`filter-${type}`} className="filter-label">
+                {config.label}:
+              </label>
+              <select
+                id={`filter-${type}`}
+                value={filterCategories[type]}
+                onChange={(e) => handleFilterCategoryChange(type, e.target.value)}
+                className="filter-select"
+              >
+                <option value="all">All</option>
+                {Object.entries(config.options).map(([value, label]) => (
+                  <option key={value} value={value}>
+                    {label}
+                  </option>
+                ))}
+              </select>
+            </div>
+          ))}
+        </div>
       </div>
       {!showArchive ? (
         <>
@@ -187,7 +273,7 @@ function App() {
             </button>
           </form>
           <ul className="todo-list">
-            {todos.map(todo => (
+            {filteredTodos.map(todo => (
               <li key={todo.id} className="todo-item">
                 {editingId === todo.id ? (
                   <>
@@ -277,6 +363,9 @@ function App() {
               </li>
             ))}
           </ul>
+          {filteredTodos.length === 0 && todos.length > 0 && (
+            <p className="empty-message">No todos match your search or filters.</p>
+          )}
           {todos.length === 0 && (
             <p className="empty-message">No todos yet. Add one to get started!</p>
           )}
@@ -284,7 +373,7 @@ function App() {
       ) : (
         <>
           <ul className="todo-list">
-            {archive.map(todo => (
+            {filteredArchive.map(todo => (
               <li key={todo.id} className="todo-item archived">
                 <span className="todo-text completed">{todo.text}</span>
                 <div className="category-badges">
@@ -319,6 +408,9 @@ function App() {
               </li>
             ))}
           </ul>
+          {filteredArchive.length === 0 && archive.length > 0 && (
+            <p className="empty-message">No archived todos match your search or filters.</p>
+          )}
           {archive.length === 0 && (
             <p className="empty-message">No archived todos yet.</p>
           )}

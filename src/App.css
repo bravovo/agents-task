@@ -2,14 +2,43 @@
   max-width: 600px;
   margin: 0 auto;
   padding: 2rem;
-  background-color: #ffffff;
+  background-color: var(--bg-primary);
+  transition: background-color 0.3s ease;
+}
+
+.header-with-theme {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.theme-toggle {
+  padding: 0.5rem 1rem;
+  background-color: var(--accent-color);
+  color: var(--bg-primary);
+  border: none;
+  border-radius: 6px;
+  font-size: 1.25rem;
+  cursor: pointer;
+  transition: all 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 50px;
+  height: 50px;
+}
+
+.theme-toggle:hover {
+  background-color: var(--accent-hover);
+  transform: scale(1.05);
 }
 
 h1 {
-  color: #8B7355;
+  color: var(--text-heading);
   text-align: center;
   font-size: 2.5rem;
-  margin-bottom: 2rem;
+  margin: 0;
   font-weight: 600;
 }
 
@@ -22,9 +51,9 @@ h1 {
 
 .toggle-button {
   padding: 0.75rem 1.5rem;
-  background-color: #E8DCC4;
-  color: #4A4A4A;
-  border: 2px solid #D2B48C;
+  background-color: var(--form-bg);
+  color: var(--text-primary);
+  border: 2px solid var(--border-color);
   border-radius: 6px;
   font-size: 1rem;
   font-weight: 500;
@@ -33,23 +62,96 @@ h1 {
 }
 
 .toggle-button:hover {
-  background-color: #D2B48C;
+  background-color: var(--border-color);
 }
 
 .toggle-button.active {
-  background-color: #8B7355;
-  color: #ffffff;
-  border-color: #8B7355;
+  background-color: var(--accent-color);
+  color: var(--bg-primary);
+  border-color: var(--accent-color);
 }
 
+/* Search and filter section with distinct blue-gray theme */
+.search-filter-section {
+  margin-bottom: 2rem;
+  padding: 1.5rem;
+  background-color: var(--search-bg);
+  border: 2px solid var(--search-border);
+  border-radius: 8px;
+  box-shadow: 0 2px 8px var(--search-shadow);
+}
+
+.search-input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 2px solid var(--search-border);
+  border-radius: 6px;
+  font-size: 1rem;
+  background-color: var(--search-input-bg);
+  color: var(--text-primary);
+  transition: border-color 0.3s;
+  box-sizing: border-box;
+  margin-bottom: 1rem;
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: var(--search-label);
+  box-shadow: 0 0 0 3px var(--search-shadow);
+}
+
+.search-input::placeholder {
+  color: var(--text-primary);
+  opacity: 0.6;
+}
+
+.filter-controls {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  flex: 1;
+  min-width: 150px;
+}
+
+.filter-label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--search-label);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.filter-select {
+  padding: 0.75rem 1rem;
+  border: 2px solid var(--search-border);
+  border-radius: 6px;
+  font-size: 1rem;
+  background-color: var(--search-input-bg);
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: border-color 0.3s;
+}
+
+.filter-select:focus {
+  outline: none;
+  border-color: var(--search-label);
+}
+
+/* Todo form section with beige theme */
 .todo-form {
   display: flex;
   gap: 0.5rem;
   margin-bottom: 2rem;
   padding: 1.5rem;
-  background-color: #F5F5DC;
+  background-color: var(--form-bg);
   border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(139, 115, 85, 0.1);
+  box-shadow: 0 2px 4px var(--form-shadow);
   flex-wrap: wrap;
   align-items: flex-end;
 }
@@ -57,22 +159,23 @@ h1 {
 .todo-input {
   width: 100%;
   padding: 0.75rem 1rem;
-  border: 2px solid #D2B48C;
+  border: 2px solid var(--border-color);
   border-radius: 6px;
   font-size: 1rem;
-  background-color: #ffffff;
-  color: #4A4A4A;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
   transition: border-color 0.3s;
   box-sizing: border-box;
 }
 
 .todo-input:focus {
   outline: none;
-  border-color: #8B7355;
+  border-color: var(--accent-color);
 }
 
 .todo-input::placeholder {
-  color: #A0A0A0;
+  color: var(--text-primary);
+  opacity: 0.6;
 }
 
 .category-group {
@@ -84,31 +187,31 @@ h1 {
 .category-label {
   font-size: 0.85rem;
   font-weight: 600;
-  color: #6F5B45;
+  color: var(--accent-hover);
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
 
 .category-select {
   padding: 0.75rem 1rem;
-  border: 2px solid #D2B48C;
+  border: 2px solid var(--border-color);
   border-radius: 6px;
   font-size: 1rem;
-  background-color: #ffffff;
-  color: #4A4A4A;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
   cursor: pointer;
   transition: border-color 0.3s;
 }
 
 .category-select:focus {
   outline: none;
-  border-color: #8B7355;
+  border-color: var(--accent-color);
 }
 
 .submit-button {
   padding: 0.75rem 1.5rem;
-  background-color: #8B7355;
-  color: #ffffff;
+  background-color: var(--accent-color);
+  color: var(--bg-primary);
   border: none;
   border-radius: 6px;
   font-size: 1rem;
@@ -118,7 +221,7 @@ h1 {
 }
 
 .submit-button:hover {
-  background-color: #6F5B45;
+  background-color: var(--accent-hover);
 }
 
 .submit-button:active {
@@ -138,22 +241,22 @@ h1 {
   gap: 1rem;
   padding: 1rem 1.25rem;
   margin-bottom: 0.75rem;
-  background-color: #FAF9F6;
-  border: 1px solid #E8DCC4;
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-color);
   border-radius: 6px;
   transition: all 0.3s;
   flex-wrap: wrap;
 }
 
 .todo-item:hover {
-  background-color: #F5F5DC;
-  box-shadow: 0 2px 6px rgba(139, 115, 85, 0.15);
+  background-color: var(--form-bg);
+  box-shadow: 0 2px 6px var(--form-shadow);
 }
 
 .todo-text {
   flex: 1;
   min-width: 200px;
-  color: #4A4A4A;
+  color: var(--text-primary);
   font-size: 1rem;
   line-height: 1.5;
 }
@@ -164,8 +267,7 @@ h1 {
 }
 
 .todo-item.archived {
-  background-color: #F0F0F0;
-  border-color: #D0D0D0;
+  opacity: 0.8;
 }
 
 .category-badges {
@@ -297,18 +399,18 @@ h1 {
   flex: 1;
   min-width: 200px;
   padding: 0.75rem 1rem;
-  border: 2px solid #8B7355;
+  border: 2px solid var(--accent-color);
   border-radius: 6px;
   font-size: 1rem;
-  background-color: #ffffff;
-  color: #4A4A4A;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
   transition: border-color 0.3s;
 }
 
 .edit-input:focus {
   outline: none;
-  border-color: #6F5B45;
-  box-shadow: 0 0 0 3px rgba(139, 115, 85, 0.1);
+  border-color: var(--accent-hover);
+  box-shadow: 0 0 0 3px var(--form-shadow);
 }
 
 .edit-categories {
@@ -321,11 +423,12 @@ h1 {
 
 .empty-message {
   text-align: center;
-  color: #A0A0A0;
+  color: var(--text-primary);
+  opacity: 0.6;
   font-style: italic;
   margin-top: 2rem;
   padding: 2rem;
-  background-color: #F5F5DC;
+  background-color: var(--form-bg);
   border-radius: 6px;
 }
 
