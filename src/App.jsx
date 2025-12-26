@@ -46,6 +46,12 @@ function App() {
     time: 'today',
     progress: 'not-started'
   })
+  const [searchText, setSearchText] = useState('')
+  const [filterCategories, setFilterCategories] = useState({
+    priority: 'all',
+    time: 'all',
+    progress: 'all'
+  })
 
   const handleSubmit = (e) => {
     e.preventDefault()
@@ -136,6 +142,32 @@ function App() {
     })
   }
 
+  const handleFilterCategoryChange = (type, value) => {
+    setFilterCategories({
+      ...filterCategories,
+      [type]: value
+    })
+  }
+
+  const filterTodos = (todoList) => {
+    return todoList.filter(todo => {
+      // Text search filter
+      const matchesSearch = searchText.trim() === '' || 
+        todo.text.toLowerCase().includes(searchText.toLowerCase())
+      
+      // Category filters
+      const matchesFilters = Object.entries(filterCategories).every(([type, value]) => {
+        if (value === 'all') return true
+        return todo.categories && todo.categories[type] === value
+      })
+      
+      return matchesSearch && matchesFilters
+    })
+  }
+
+  const filteredTodos = filterTodos(todos)
+  const filteredArchive = filterTodos(archive)
+
   return (
     <div className="app">
       <h1>Todo App</h1>
@@ -152,6 +184,37 @@ function App() {
         >
           Archive ({archive.length})
         </button>
+      </div>
+      <div className="search-filter-section">
+        <input
+          type="text"
+          value={searchText}
+          onChange={(e) => setSearchText(e.target.value)}
+          placeholder="Search todos..."
+          className="search-input"
+        />
+        <div className="filter-controls">
+          {Object.entries(categoryTypes).map(([type, config]) => (
+            <div key={type} className="filter-group">
+              <label htmlFor={`filter-${type}`} className="filter-label">
+                {config.label}:
+              </label>
+              <select
+                id={`filter-${type}`}
+                value={filterCategories[type]}
+                onChange={(e) => handleFilterCategoryChange(type, e.target.value)}
+                className="filter-select"
+              >
+                <option value="all">All</option>
+                {Object.entries(config.options).map(([value, label]) => (
+                  <option key={value} value={value}>
+                    {label}
+                  </option>
+                ))}
+              </select>
+            </div>
+          ))}
+        </div>
       </div>
       {!showArchive ? (
         <>
@@ -187,7 +250,7 @@ function App() {
             </button>
           </form>
           <ul className="todo-list">
-            {todos.map(todo => (
+            {filteredTodos.map(todo => (
               <li key={todo.id} className="todo-item">
                 {editingId === todo.id ? (
                   <>
@@ -277,6 +340,9 @@ function App() {
               </li>
             ))}
           </ul>
+          {filteredTodos.length === 0 && todos.length > 0 && (
+            <p className="empty-message">No todos match your search or filters.</p>
+          )}
           {todos.length === 0 && (
             <p className="empty-message">No todos yet. Add one to get started!</p>
           )}
@@ -284,7 +350,7 @@ function App() {
       ) : (
         <>
           <ul className="todo-list">
-            {archive.map(todo => (
+            {filteredArchive.map(todo => (
               <li key={todo.id} className="todo-item archived">
                 <span className="todo-text completed">{todo.text}</span>
                 <div className="category-badges">
@@ -319,6 +385,9 @@ function App() {
               </li>
             ))}
           </ul>
+          {filteredArchive.length === 0 && archive.length > 0 && (
+            <p className="empty-message">No archived todos match your search or filters.</p>
+          )}
           {archive.length === 0 && (
             <p className="empty-message">No archived todos yet.</p>
           )}

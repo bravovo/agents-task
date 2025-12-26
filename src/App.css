@@ -42,6 +42,74 @@ h1 {
   border-color: #8B7355;
 }
 
+.search-filter-section {
+  margin-bottom: 2rem;
+  padding: 1.5rem;
+  background-color: #F5F5DC;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(139, 115, 85, 0.1);
+}
+
+.search-input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 2px solid #D2B48C;
+  border-radius: 6px;
+  font-size: 1rem;
+  background-color: #ffffff;
+  color: #4A4A4A;
+  transition: border-color 0.3s;
+  box-sizing: border-box;
+  margin-bottom: 1rem;
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: #8B7355;
+}
+
+.search-input::placeholder {
+  color: #A0A0A0;
+}
+
+.filter-controls {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  flex: 1;
+  min-width: 150px;
+}
+
+.filter-label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #6F5B45;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.filter-select {
+  padding: 0.75rem 1rem;
+  border: 2px solid #D2B48C;
+  border-radius: 6px;
+  font-size: 1rem;
+  background-color: #ffffff;
+  color: #4A4A4A;
+  cursor: pointer;
+  transition: border-color 0.3s;
+}
+
+.filter-select:focus {
+  outline: none;
+  border-color: #8B7355;
+}
+
 .todo-form {
   display: flex;
   gap: 0.5rem;
