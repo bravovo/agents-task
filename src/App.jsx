@@ -39,6 +39,8 @@ function App() {
     progress: 'not-started'
   })
   const [showArchive, setShowArchive] = useState(false)
+  const [editingId, setEditingId] = useState(null)
+  const [editValue, setEditValue] = useState('')
 
   const handleSubmit = (e) => {
     e.preventDefault()
@@ -88,6 +90,27 @@ function App() {
       setTodos([...todos, restoredTodo])
       setArchive(archive.filter(todo => todo.id !== id))
     }
+  }
+
+  const handleEdit = (id, text) => {
+    setEditingId(id)
+    setEditValue(text)
+  }
+
+  const handleSave = (id) => {
+    const trimmedValue = editValue.trim()
+    if (trimmedValue) {
+      setTodos(todos.map(todo => 
+        todo.id === id ? { ...todo, text: trimmedValue } : todo
+      ))
+      setEditingId(null)
+      setEditValue('')
+    }
+  }
+
+  const handleCancelEdit = () => {
+    setEditingId(null)
+    setEditValue('')
   }
 
   return (
@@ -143,36 +166,70 @@ function App() {
           <ul className="todo-list">
             {todos.map(todo => (
               <li key={todo.id} className="todo-item">
-                <span className="todo-text">{todo.text}</span>
-                <div className="category-badges">
-                  {todo.categories && Object.entries(todo.categories).map(([type, value]) => {
-                    const typeConfig = categoryTypes[type]
-                    if (!typeConfig) return null
-                    const label = typeConfig.options[value] || value
-                    return (
-                      <span 
-                        key={`${todo.id}-${type}`} 
-                        className={`category-badge category-${type}-${value}`}
+                {editingId === todo.id ? (
+                  <>
+                    <input
+                      type="text"
+                      value={editValue}
+                      onChange={(e) => setEditValue(e.target.value)}
+                      className="edit-input"
+                      autoFocus
+                    />
+                    <div className="button-group">
+                      <button
+                        onClick={() => handleSave(todo.id)}
+                        className="save-button"
                       >
-                        {label}
-                      </span>
-                    )
-                  })}
-                </div>
-                <div className="button-group">
-                  <button
-                    onClick={() => handleComplete(todo.id)}
-                    className="complete-button"
-                  >
-                    Complete
-                  </button>
-                  <button
-                    onClick={() => handleDelete(todo.id)}
-                    className="delete-button"
-                  >
-                    Delete
-                  </button>
-                </div>
+                        Save
+                      </button>
+                      <button
+                        onClick={handleCancelEdit}
+                        className="cancel-button"
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <span className="todo-text">{todo.text}</span>
+                    <div className="category-badges">
+                      {todo.categories && Object.entries(todo.categories).map(([type, value]) => {
+                        const typeConfig = categoryTypes[type]
+                        if (!typeConfig) return null
+                        const label = typeConfig.options[value] || value
+                        return (
+                          <span 
+                            key={`${todo.id}-${type}`} 
+                            className={`category-badge category-${type}-${value}`}
+                          >
+                            {label}
+                          </span>
+                        )
+                      })}
+                    </div>
+                    <div className="button-group">
+                      <button
+                        onClick={() => handleEdit(todo.id, todo.text)}
+                        className="edit-button"
+                      >
+                        Edit
+                      </button>
+                      <button
+                        onClick={() => handleComplete(todo.id)}
+                        className="complete-button"
+                      >
+                        Complete
+                      </button>
+                      <button
+                        onClick={() => handleDelete(todo.id)}
+                        className="delete-button"
+                      >
+                        Delete
+                      </button>
+                    </div>
+                  </>
+                )}
               </li>
             ))}
           </ul>
