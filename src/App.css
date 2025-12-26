@@ -1,42 +1,124 @@
-#root {
-  max-width: 1280px;
+.app {
+  max-width: 600px;
   margin: 0 auto;
   padding: 2rem;
+  background-color: #ffffff;
+  min-height: 100vh;
+}
+
+h1 {
+  color: #8B7355;
   text-align: center;
+  font-size: 2.5rem;
+  margin-bottom: 2rem;
+  font-weight: 600;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+.todo-form {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 2rem;
+  padding: 1.5rem;
+  background-color: #F5F5DC;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(139, 115, 85, 0.1);
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.todo-input {
+  flex: 1;
+  padding: 0.75rem 1rem;
+  border: 2px solid #D2B48C;
+  border-radius: 6px;
+  font-size: 1rem;
+  background-color: #ffffff;
+  color: #4A4A4A;
+  transition: border-color 0.3s;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
+.todo-input:focus {
+  outline: none;
+  border-color: #8B7355;
 }
 
-.card {
-  padding: 2em;
+.todo-input::placeholder {
+  color: #A0A0A0;
 }
 
-.read-the-docs {
-  color: #888;
+.submit-button {
+  padding: 0.75rem 1.5rem;
+  background-color: #8B7355;
+  color: #ffffff;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.submit-button:hover {
+  background-color: #6F5B45;
+}
+
+.submit-button:active {
+  transform: translateY(1px);
+}
+
+.todo-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.todo-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.25rem;
+  margin-bottom: 0.75rem;
+  background-color: #FAF9F6;
+  border: 1px solid #E8DCC4;
+  border-radius: 6px;
+  transition: all 0.3s;
+}
+
+.todo-item:hover {
+  background-color: #F5F5DC;
+  box-shadow: 0 2px 6px rgba(139, 115, 85, 0.15);
+}
+
+.todo-text {
+  flex: 1;
+  color: #4A4A4A;
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+.delete-button {
+  padding: 0.5rem 1rem;
+  background-color: #D2691E;
+  color: #ffffff;
+  border: none;
+  border-radius: 5px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.delete-button:hover {
+  background-color: #A0522D;
+}
+
+.delete-button:active {
+  transform: translateY(1px);
+}
+
+.empty-message {
+  text-align: center;
+  color: #A0A0A0;
+  font-style: italic;
+  margin-top: 2rem;
+  padding: 2rem;
+  background-color: #F5F5DC;
+  border-radius: 6px;
 }
