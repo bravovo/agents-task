@@ -15,12 +15,18 @@ function TodoList({
   getCategoryType,
   getCategoryValuesByType,
   CATEGORIES,
-  isArchive = false 
+  isArchive = false,
+  hasActiveSearch = false
 }) {
   if (todos.length === 0) {
     return (
       <div className="empty-state">
-        <p>{isArchive ? 'No archived todos yet.' : 'No todos yet. Add one above!'}</p>
+        <p>
+          {hasActiveSearch 
+            ? (isArchive ? 'No archived todos match your search criteria.' : 'No todos match your search criteria.')
+            : (isArchive ? 'No archived todos yet.' : 'No todos yet. Add one above!')
+          }
+        </p>
       </div>
     )
   }
