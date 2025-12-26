@@ -13,6 +13,35 @@ h1 {
   font-weight: 600;
 }
 
+.view-toggle {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 2rem;
+  justify-content: center;
+}
+
+.toggle-button {
+  padding: 0.75rem 1.5rem;
+  background-color: #E8DCC4;
+  color: #4A4A4A;
+  border: 2px solid #D2B48C;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.toggle-button:hover {
+  background-color: #D2B48C;
+}
+
+.toggle-button.active {
+  background-color: #8B7355;
+  color: #ffffff;
+  border-color: #8B7355;
+}
+
 .todo-form {
   display: flex;
   gap: 0.5rem;
@@ -129,10 +158,63 @@ h1 {
   line-height: 1.5;
 }
 
+.todo-text.completed {
+  text-decoration: line-through;
+  opacity: 0.7;
+}
+
+.todo-item.archived {
+  background-color: #F0F0F0;
+  border-color: #D0D0D0;
+}
+
 .category-badges {
   display: flex;
   gap: 0.5rem;
   flex-wrap: wrap;
+}
+
+.button-group {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.complete-button {
+  padding: 0.5rem 1rem;
+  background-color: #32CD32;
+  color: #ffffff;
+  border: none;
+  border-radius: 5px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.complete-button:hover {
+  background-color: #228B22;
+}
+
+.complete-button:active {
+  transform: translateY(1px);
+}
+
+.restore-button {
+  padding: 0.5rem 1rem;
+  background-color: #4169E1;
+  color: #ffffff;
+  border: none;
+  border-radius: 5px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.restore-button:hover {
+  background-color: #1E3A8A;
+}
+
+.restore-button:active {
+  transform: translateY(1px);
 }
 
 .delete-button {
