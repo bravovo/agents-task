@@ -106,9 +106,10 @@ function App() {
           <li key={todo.id} className="todo-item">
             <span className="todo-text">{todo.text}</span>
             <div className="category-badges">
-              {Object.entries(todo.categories).map(([type, value]) => {
+              {todo.categories && Object.entries(todo.categories).map(([type, value]) => {
                 const typeConfig = categoryTypes[type]
-                const label = typeConfig?.options[value] || value
+                if (!typeConfig) return null
+                const label = typeConfig.options[value] || value
                 return (
                   <span 
                     key={`${todo.id}-${type}`} 
