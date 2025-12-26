@@ -4,7 +4,8 @@ import TodoList from './components/TodoList'
 // LocalStorage keys
 const STORAGE_KEYS = {
   TODOS: 'todos',
-  ARCHIVED_TODOS: 'archivedTodos'
+  ARCHIVED_TODOS: 'archivedTodos',
+  THEME: 'theme'
 }
 
 // Helper function to load from localStorage
@@ -58,6 +59,12 @@ function App() {
   const [editingId, setEditingId] = useState(null)
   const [editText, setEditText] = useState('')
   const [editCategories, setEditCategories] = useState(['medium'])
+  const [searchText, setSearchText] = useState('')
+  const [searchCategories, setSearchCategories] = useState([])
+  const [isDarkTheme, setIsDarkTheme] = useState(() => {
+    const savedTheme = localStorage.getItem(STORAGE_KEYS.THEME)
+    return savedTheme ? savedTheme === 'dark' : false
+  })
 
   // Save todos to localStorage whenever they change
   useEffect(() => {
@@ -68,6 +75,17 @@ function App() {
   useEffect(() => {
     saveToStorage(STORAGE_KEYS.ARCHIVED_TODOS, archivedTodos)
   }, [archivedTodos])
+
+  // Save theme preference to localStorage and apply to document
+  useEffect(() => {
+    saveToStorage(STORAGE_KEYS.THEME, isDarkTheme ? 'dark' : 'light')
+    document.documentElement.setAttribute('data-theme', isDarkTheme ? 'dark' : 'light')
+  }, [isDarkTheme])
+
+  // Apply theme on mount
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', isDarkTheme ? 'dark' : 'light')
+  }, [])
 
   // Helper function to get the category type for a given category value
   const getCategoryType = (categoryValue) => {
@@ -169,10 +187,52 @@ function App() {
     setEditCategories(['medium'])
   }
 
+  // Filter todos based on search criteria
+  const filterTodos = (todoList) => {
+    return todoList.filter(todo => {
+      // Text search filter
+      const matchesText = searchText === '' || 
+        todo.text.toLowerCase().includes(searchText.toLowerCase())
+      
+      // Category filter
+      const matchesCategory = searchCategories.length === 0 || 
+        (todo.categories || (todo.category ? [todo.category] : [])).some(
+          cat => searchCategories.includes(cat)
+        )
+      
+      return matchesText && matchesCategory
+    })
+  }
+
+  const handleSearchCategoryChange = (categoryValue) => {
+    setSearchCategories(prev => {
+      if (prev.includes(categoryValue)) {
+        return prev.filter(cat => cat !== categoryValue)
+      } else {
+        return [...prev, categoryValue]
+      }
+    })
+  }
+
+  // Get filtered todos for current view
+  const filteredTodos = activeView === 'active' 
+    ? filterTodos(todos)
+    : filterTodos(archivedTodos)
+
   return (
     <div className="app">
       <div className="container">
-        <h1>Todo List</h1>
+        <div className="header-with-theme">
+          <h1>Todo List</h1>
+          <button
+            onClick={() => setIsDarkTheme(!isDarkTheme)}
+            className="theme-toggle"
+            aria-label={isDarkTheme ? 'Switch to light theme' : 'Switch to dark theme'}
+            title={isDarkTheme ? 'Switch to light theme' : 'Switch to dark theme'}
+          >
+            {isDarkTheme ? '☀️' : '🌙'}
+          </button>
+        </div>
         <div className="view-switcher">
           <button
             onClick={() => setActiveView('active')}
@@ -186,6 +246,81 @@ function App() {
           >
             Archive ({archivedTodos.length})
           </button>
+        </div>
+        <div className="search-section">
+          <div className="search-header">
+            <h2>Search Todos</h2>
+          </div>
+          <div className="search-form">
+            <input
+              type="text"
+              value={searchText}
+              onChange={(e) => setSearchText(e.target.value)}
+              placeholder="Search by text..."
+              className="search-input"
+            />
+            <div className="search-category-selection">
+              <div className="category-group">
+                <label className="category-group-label">Filter by Priority:</label>
+                <div className="category-checkboxes">
+                  {CATEGORIES.priority.map(cat => (
+                    <label key={cat.value} className="category-checkbox-label">
+                      <input
+                        type="checkbox"
+                        checked={searchCategories.includes(cat.value)}
+                        onChange={() => handleSearchCategoryChange(cat.value)}
+                        className="category-checkbox"
+                      />
+                      <span>{cat.label}</span>
+                    </label>
+                  ))}
+                </div>
+              </div>
+              <div className="category-group">
+                <label className="category-group-label">Filter by Time:</label>
+                <div className="category-checkboxes">
+                  {CATEGORIES.time.map(cat => (
+                    <label key={cat.value} className="category-checkbox-label">
+                      <input
+                        type="checkbox"
+                        checked={searchCategories.includes(cat.value)}
+                        onChange={() => handleSearchCategoryChange(cat.value)}
+                        className="category-checkbox"
+                      />
+                      <span>{cat.label}</span>
+                    </label>
+                  ))}
+                </div>
+              </div>
+              <div className="category-group">
+                <label className="category-group-label">Filter by Progress:</label>
+                <div className="category-checkboxes">
+                  {CATEGORIES.progress.map(cat => (
+                    <label key={cat.value} className="category-checkbox-label">
+                      <input
+                        type="checkbox"
+                        checked={searchCategories.includes(cat.value)}
+                        onChange={() => handleSearchCategoryChange(cat.value)}
+                        className="category-checkbox"
+                      />
+                      <span>{cat.label}</span>
+                    </label>
+                  ))}
+                </div>
+              </div>
+            </div>
+            {(searchText || searchCategories.length > 0) && (
+              <button
+                onClick={() => {
+                  setSearchText('')
+                  setSearchCategories([])
+                }}
+                className="clear-search-button"
+              >
+                Clear Search
+              </button>
+            )}
+          </div>
         </div>
         {activeView === 'active' && (
           <form onSubmit={handleSubmit} className="todo-form">
@@ -253,14 +388,22 @@ function App() {
         )}
         <div className="todo-count">
           {activeView === 'active' ? (
-            <p>{todos.length} uncompleted todo tasks</p>
+            <p>
+              {searchText || searchCategories.length > 0 
+                ? `${filteredTodos.length} of ${todos.length} uncompleted todo tasks`
+                : `${todos.length} uncompleted todo tasks`}
+            </p>
           ) : (
-            <p>{archivedTodos.length} completed todo tasks</p>
+            <p>
+              {searchText || searchCategories.length > 0
+                ? `${filteredTodos.length} of ${archivedTodos.length} completed todo tasks`
+                : `${archivedTodos.length} completed todo tasks`}
+            </p>
           )}
         </div>
         {activeView === 'active' ? (
           <TodoList 
-            todos={todos} 
+            todos={filteredTodos} 
             onDelete={handleDelete}
             onComplete={handleComplete}
             onEdit={handleEdit}
@@ -276,13 +419,15 @@ function App() {
             getCategoryValuesByType={getCategoryValuesByType}
             CATEGORIES={CATEGORIES}
             isArchive={false}
+            hasActiveSearch={searchText !== '' || searchCategories.length > 0}
           />
         ) : (
           <TodoList 
-            todos={archivedTodos} 
+            todos={filteredTodos} 
             onDelete={handleDeleteFromArchive}
             onIncomplete={handleIncomplete}
             isArchive={true}
+            hasActiveSearch={searchText !== '' || searchCategories.length > 0}
           />
         )}
       </div>
