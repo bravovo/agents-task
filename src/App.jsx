@@ -52,6 +52,7 @@ function App() {
     time: 'all',
     progress: 'all'
   })
+  const [theme, setTheme] = useState('light')
 
   const handleSubmit = (e) => {
     e.preventDefault()
@@ -173,8 +174,17 @@ function App() {
   const filteredArchive = filterTodos(archive)
 
   return (
-    <div className="app">
-      <h1>Todo App</h1>
+    <div className={`app ${theme}`}>
+      <div className="header-with-theme">
+        <h1>Todo App</h1>
+        <button 
+          className="theme-toggle"
+          onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}
+          aria-label="Toggle theme"
+        >
+          {theme === 'light' ? '🌙' : '☀️'}
+        </button>
+      </div>
       <div className="view-toggle">
         <button 
           className={`toggle-button ${!showArchive ? 'active' : ''}`}

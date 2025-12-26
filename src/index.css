@@ -3,9 +3,28 @@
   line-height: 1.5;
   font-weight: 400;
 
-  color: #4A4A4A;
-  background-color: #FEFEFE;
-
+  /* Light theme colors */
+  --bg-primary: #ffffff;
+  --bg-secondary: #FEFEFE;
+  --bg-gradient-start: #FEFEFE;
+  --bg-gradient-end: #F5F5DC;
+  --text-primary: #4A4A4A;
+  --text-heading: #8B7355;
+  --border-color: #D2B48C;
+  --accent-color: #8B7355;
+  --accent-hover: #6F5B45;
+  
+  /* Search section colors (distinct blue-gray theme) */
+  --search-bg: #E8F4F8;
+  --search-border: #7BA8C1;
+  --search-label: #3A6B85;
+  --search-input-bg: #FFFFFF;
+  --search-shadow: rgba(123, 168, 193, 0.15);
+  
+  /* Form section colors (keep beige theme) */
+  --form-bg: #F5F5DC;
+  --form-shadow: rgba(139, 115, 85, 0.1);
+  
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -19,7 +38,9 @@ body {
   align-items: center;
   min-width: 320px;
   min-height: 100vh;
-  background: linear-gradient(135deg, #FEFEFE 0%, #F5F5DC 100%);
+  background: linear-gradient(135deg, var(--bg-gradient-start) 0%, var(--bg-gradient-end) 100%);
+  color: var(--text-primary);
+  transition: background 0.3s ease, color 0.3s ease;
 }
 
 #root {
@@ -49,4 +70,28 @@ button {
 button:focus,
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
+}
+
+/* Dark theme colors */
+body:has(.app.dark) {
+  --bg-primary: #1a1a1a;
+  --bg-secondary: #2d2d2d;
+  --bg-gradient-start: #1a1a1a;
+  --bg-gradient-end: #2d2d2d;
+  --text-primary: #e0e0e0;
+  --text-heading: #c9a87c;
+  --border-color: #4a4a4a;
+  --accent-color: #c9a87c;
+  --accent-hover: #b89968;
+  
+  /* Dark theme search section (blue-gray) */
+  --search-bg: #1e2d3a;
+  --search-border: #4a6b82;
+  --search-label: #88b3d1;
+  --search-input-bg: #2a3f52;
+  --search-shadow: rgba(74, 107, 130, 0.3);
+  
+  /* Dark theme form section (darker beige) */
+  --form-bg: #2a2520;
+  --form-shadow: rgba(201, 168, 124, 0.15);
 }
