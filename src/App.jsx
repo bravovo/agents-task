@@ -7,8 +7,9 @@ function App() {
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    if (inputValue.trim()) {
-      setTodos([...todos, { id: Date.now(), text: inputValue }])
+    const trimmedValue = inputValue.trim()
+    if (trimmedValue) {
+      setTodos([...todos, { id: crypto.randomUUID(), text: trimmedValue }])
       setInputValue('')
     }
   }
