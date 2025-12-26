@@ -1,6 +1,10 @@
 <img width="935" height="611" alt="image" src="https://github.com/user-attachments/assets/83c43754-ba4a-4bb7-adde-9bb209da3758" />
 <img width="713" height="262" alt="image" src="https://github.com/user-attachments/assets/c3a3e520-db50-4557-899f-336342a01384" />
 
+<img width="811" height="439" alt="image" src="https://github.com/user-attachments/assets/345cf67e-11f4-4d89-8ab5-3cc1ba4b9750" />
+<img width="791" height="819" alt="image" src="https://github.com/user-attachments/assets/c9ad4867-0801-4a52-adc0-6d587089f2db" />
+<img width="822" height="554" alt="image" src="https://github.com/user-attachments/assets/04159c94-c836-474b-af09-3cab7c54c327" />
+
 
 # Todo List App
 
@@ -65,4 +69,6 @@ src/
 - React 18
 - Vite
 - CSS3
+
+<img width="1068" height="490" alt="image" src="https://github.com/user-attachments/assets/a98c4e53-368b-4dcf-a7f9-2fbd74c9cfa0" />
 
