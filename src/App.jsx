@@ -41,6 +41,11 @@ function App() {
   const [showArchive, setShowArchive] = useState(false)
   const [editingId, setEditingId] = useState(null)
   const [editValue, setEditValue] = useState('')
+  const [editCategories, setEditCategories] = useState({
+    priority: 'medium',
+    time: 'today',
+    progress: 'not-started'
+  })
 
   const handleSubmit = (e) => {
     e.preventDefault()
@@ -92,25 +97,43 @@ function App() {
     }
   }
 
-  const handleEdit = (id, text) => {
+  const handleEdit = (id, text, categories) => {
     setEditingId(id)
     setEditValue(text)
+    setEditCategories({ ...categories })
   }
 
   const handleSave = (id) => {
     const trimmedValue = editValue.trim()
     if (trimmedValue) {
       setTodos(todos.map(todo => 
-        todo.id === id ? { ...todo, text: trimmedValue } : todo
+        todo.id === id ? { ...todo, text: trimmedValue, categories: { ...editCategories } } : todo
       ))
       setEditingId(null)
       setEditValue('')
+      setEditCategories({
+        priority: 'medium',
+        time: 'today',
+        progress: 'not-started'
+      })
     }
   }
 
   const handleCancelEdit = () => {
     setEditingId(null)
     setEditValue('')
+    setEditCategories({
+      priority: 'medium',
+      time: 'today',
+      progress: 'not-started'
+    })
+  }
+
+  const handleEditCategoryChange = (type, value) => {
+    setEditCategories({
+      ...editCategories,
+      [type]: value
+    })
   }
 
   return (
@@ -175,6 +198,27 @@ function App() {
                       className="edit-input"
                       autoFocus
                     />
+                    <div className="edit-categories">
+                      {Object.entries(categoryTypes).map(([type, config]) => (
+                        <div key={type} className="category-group">
+                          <label htmlFor={`edit-${type}-select`} className="category-label">
+                            {config.label}:
+                          </label>
+                          <select
+                            id={`edit-${type}-select`}
+                            value={editCategories[type]}
+                            onChange={(e) => handleEditCategoryChange(type, e.target.value)}
+                            className="category-select"
+                          >
+                            {Object.entries(config.options).map(([value, label]) => (
+                              <option key={value} value={value}>
+                                {label}
+                              </option>
+                            ))}
+                          </select>
+                        </div>
+                      ))}
+                    </div>
                     <div className="button-group">
                       <button
                         onClick={() => handleSave(todo.id)}
@@ -210,7 +254,7 @@ function App() {
                     </div>
                     <div className="button-group">
                       <button
-                        onClick={() => handleEdit(todo.id, todo.text)}
+                        onClick={() => handleEdit(todo.id, todo.text, todo.categories)}
                         className="edit-button"
                       >
                         Edit
