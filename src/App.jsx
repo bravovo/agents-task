@@ -1,16 +1,18 @@
 import { useState } from 'react'
 import './App.css'
 
+const categoryLabels = {
+  high: 'High',
+  medium: 'Medium',
+  low: 'Low'
+}
+
+const validCategories = ['high', 'medium', 'low']
+
 function App() {
   const [todos, setTodos] = useState([])
   const [inputValue, setInputValue] = useState('')
   const [category, setCategory] = useState('medium')
-
-  const categoryLabels = {
-    high: 'High',
-    medium: 'Medium',
-    low: 'Low'
-  }
 
   const handleSubmit = (e) => {
     e.preventDefault()
@@ -51,20 +53,23 @@ function App() {
         </button>
       </form>
       <ul className="todo-list">
-        {todos.map(todo => (
-          <li key={todo.id} className="todo-item">
-            <span className="todo-text">{todo.text}</span>
-            <span className={`category-badge category-${todo.category}`}>
-              {categoryLabels[todo.category] || 'Unknown'}
-            </span>
-            <button
-              onClick={() => handleDelete(todo.id)}
-              className="delete-button"
-            >
-              Delete
-            </button>
-          </li>
-        ))}
+        {todos.map(todo => {
+          const safeCategory = validCategories.includes(todo.category) ? todo.category : 'medium'
+          return (
+            <li key={todo.id} className="todo-item">
+              <span className="todo-text">{todo.text}</span>
+              <span className={`category-badge category-${safeCategory}`}>
+                {categoryLabels[safeCategory]}
+              </span>
+              <button
+                onClick={() => handleDelete(todo.id)}
+                className="delete-button"
+              >
+                Delete
+              </button>
+            </li>
+          )
+        })}
       </ul>
       {todos.length === 0 && (
         <p className="empty-message">No todos yet. Add one to get started!</p>
