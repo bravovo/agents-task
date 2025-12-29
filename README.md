@@ -53,14 +53,31 @@ npm run preview
 
 ## Testing
 
-This project includes comprehensive unit tests using Jest and React Testing Library.
+This project includes comprehensive unit tests and end-to-end (E2E) integration tests using Jest and React Testing Library.
+
+### Test Files
+
+- **`src/App.test.jsx`** - Unit tests for individual components and functions
+- **`src/App.e2e.test.jsx`** - End-to-end integration tests simulating complete user workflows
 
 ### Run Tests
 
-Run all tests once:
+Run all tests once (both unit and E2E tests):
 
 ```bash
 npm test
+```
+
+Run only E2E tests:
+
+```bash
+npm test -- App.e2e.test.jsx
+```
+
+Run only unit tests:
+
+```bash
+npm test -- App.test.jsx
 ```
 
 Run tests in watch mode (automatically re-runs on file changes):
@@ -68,6 +85,39 @@ Run tests in watch mode (automatically re-runs on file changes):
 ```bash
 npm run test:watch
 ```
+
+### End-to-End Tests
+
+The E2E tests (`src/App.e2e.test.jsx`) simulate complete user workflows and include:
+
+1. **Main E2E Scenario**: Complete todo lifecycle
+   - Create todo → Edit todo with new category → Complete todo → Search in archive → Uncomplete → Delete
+
+2. **Multiple Todos Workflow**: Handling multiple todos simultaneously
+   - Create multiple todos → Complete some → Search and filter → Delete multiple
+
+3. **Search and Filter Workflow**: Testing search functionality
+   - Search by text and categories across active and archive views
+
+4. **Category Management Workflow**: Testing category changes
+   - Edit categories and maintain category constraints
+
+5. **Edit Cancellation Workflow**: Testing edit cancellation
+   - Start editing and cancel without saving changes
+
+6. **Archive to Active and Back**: Testing todo movement
+   - Move todos between active and archive multiple times
+
+7. **Empty States and Edge Cases**: Testing edge cases
+   - Empty states, search with no results, etc.
+
+8. **Theme Toggle Functionality**: Testing theme switching
+   - Toggle between light and dark themes
+   - Theme persistence in localStorage
+   - Theme persistence across app re-renders
+   - Theme maintenance during todo operations
+   - Multiple theme toggles
+   - Loading saved theme preference
 
 ### Test Coverage
 
@@ -125,7 +175,8 @@ src/
 ├── main.jsx          # Application entry point
 ├── App.jsx           # Main app component with todo state management
 ├── App.css           # Styles with white and beige theme
-├── App.test.jsx     # Unit tests for App component
+├── App.test.jsx      # Unit tests for App component
+├── App.e2e.test.jsx  # End-to-end integration tests
 ├── setupTests.js     # Jest test setup configuration
 └── components/
     └── TodoList.jsx  # Component for displaying todos
