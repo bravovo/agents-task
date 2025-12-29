@@ -1549,3 +1549,152 @@ describe('Todo App - Searching Todos', () => {
   });
 });
 
+describe('Todo App - Theme Toggle', () => {
+  test('should render theme toggle button', () => {
+    render(<App />);
+    const themeButton = screen.getByRole('button', { name: /switch to/i });
+    expect(themeButton).toBeInTheDocument();
+    expect(themeButton).toHaveClass('theme-toggle');
+  });
+
+  test('should start with light theme by default', () => {
+    render(<App />);
+    const themeButton = screen.getByRole('button', { name: /switch to dark theme/i });
+    expect(themeButton).toBeInTheDocument();
+    expect(themeButton).toHaveTextContent('🌙');
+    expect(document.documentElement.getAttribute('data-theme')).toBe('light');
+  });
+
+  test('should toggle to dark theme when button is clicked', async () => {
+    const user = userEvent.setup();
+    render(<App />);
+    
+    const themeButton = screen.getByRole('button', { name: /switch to dark theme/i });
+    await user.click(themeButton);
+
+    await waitFor(() => {
+      expect(document.documentElement.getAttribute('data-theme')).toBe('dark');
+      expect(themeButton).toHaveTextContent('☀️');
+      expect(themeButton).toHaveAttribute('aria-label', 'Switch to light theme');
+      expect(themeButton).toHaveAttribute('title', 'Switch to light theme');
+    });
+  });
+
+  test('should toggle back to light theme when clicked again', async () => {
+    const user = userEvent.setup();
+    render(<App />);
+    
+    const themeButton = screen.getByRole('button', { name: /switch to dark theme/i });
+    
+    // Toggle to dark
+    await user.click(themeButton);
+    await waitFor(() => {
+      expect(document.documentElement.getAttribute('data-theme')).toBe('dark');
+    });
+
+    // Toggle back to light
+    const lightThemeButton = screen.getByRole('button', { name: /switch to light theme/i });
+    await user.click(lightThemeButton);
+
+    await waitFor(() => {
+      expect(document.documentElement.getAttribute('data-theme')).toBe('light');
+      expect(lightThemeButton).toHaveTextContent('🌙');
+      expect(lightThemeButton).toHaveAttribute('aria-label', 'Switch to dark theme');
+    });
+  });
+
+  test('should save theme preference to localStorage', async () => {
+    const user = userEvent.setup();
+    render(<App />);
+    
+    const themeButton = screen.getByRole('button', { name: /switch to dark theme/i });
+    await user.click(themeButton);
+
+    await waitFor(() => {
+      expect(mockLocalStorage.setItem).toHaveBeenCalledWith('theme', '"dark"');
+    });
+  });
+
+  test('should load theme preference from localStorage on mount', () => {
+    mockLocalStorage.getItem.mockImplementation((key) => {
+      if (key === 'theme') return 'dark';
+      return null;
+    });
+    render(<App />);
+
+    const themeButton = screen.getByRole('button', { name: /switch to light theme/i });
+    expect(themeButton).toBeInTheDocument();
+    expect(themeButton).toHaveTextContent('☀️');
+    expect(document.documentElement.getAttribute('data-theme')).toBe('dark');
+  });
+
+  test('should apply theme attribute to document element on mount', () => {
+    render(<App />);
+    expect(document.documentElement.getAttribute('data-theme')).toBe('light');
+  });
+
+  test('should update document element when theme changes', async () => {
+    const user = userEvent.setup();
+    render(<App />);
+    
+    expect(document.documentElement.getAttribute('data-theme')).toBe('light');
+    
+    const themeButton = screen.getByRole('button', { name: /switch to dark theme/i });
+    await user.click(themeButton);
+
+    await waitFor(() => {
+      expect(document.documentElement.getAttribute('data-theme')).toBe('dark');
+    });
+  });
+
+  test('should maintain theme during todo operations', async () => {
+    const user = userEvent.setup();
+    render(<App />);
+    
+    // Set to dark theme
+    const themeButton = screen.getByRole('button', { name: /switch to dark theme/i });
+    await user.click(themeButton);
+    
+    await waitFor(() => {
+      expect(document.documentElement.getAttribute('data-theme')).toBe('dark');
+    });
+
+    // Add a todo
+    const input = screen.getByPlaceholderText('Add a new todo...');
+    const submitButton = screen.getByText('Add Todo');
+    await user.type(input, 'Test todo');
+    await user.click(submitButton);
+
+    // Theme should still be dark
+    expect(document.documentElement.getAttribute('data-theme')).toBe('dark');
+    expect(screen.getByText('Test todo')).toBeInTheDocument();
+  });
+
+  test('should persist theme across multiple toggles', async () => {
+    const user = userEvent.setup();
+    render(<App />);
+    
+    const themeButton = screen.getByRole('button', { name: /switch to dark theme/i });
+    
+    // Toggle multiple times
+    await user.click(themeButton); // dark
+    await waitFor(() => {
+      expect(document.documentElement.getAttribute('data-theme')).toBe('dark');
+    });
+
+    await user.click(screen.getByRole('button', { name: /switch to light theme/i })); // light
+    await waitFor(() => {
+      expect(document.documentElement.getAttribute('data-theme')).toBe('light');
+    });
+
+    await user.click(screen.getByRole('button', { name: /switch to dark theme/i })); // dark
+    await waitFor(() => {
+      expect(document.documentElement.getAttribute('data-theme')).toBe('dark');
+    });
+
+    // Final state should be dark
+    expect(document.documentElement.getAttribute('data-theme')).toBe('dark');
+    expect(mockLocalStorage.setItem).toHaveBeenCalledWith('theme', '"dark"');
+  });
+});
+
