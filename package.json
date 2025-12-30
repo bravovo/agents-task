@@ -10,7 +10,13 @@
     "test": "jest",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
-    "test:coverage:watch": "jest --coverage --watch"
+    "test:coverage:watch": "jest --coverage --watch",
+    "cypress:open": "cypress open",
+    "cypress:run": "cypress run",
+    "test:e2e": "cypress run",
+    "test:e2e:open": "cypress open",
+    "test:e2e:coverage": "cypress run --env coverage=true",
+    "test:e2e:coverage:open": "cypress open --env coverage=true"
   },
   "dependencies": {
     "react": "^18.2.0",
@@ -19,6 +25,7 @@
   "devDependencies": {
     "@babel/preset-env": "^7.28.5",
     "@babel/preset-react": "^7.28.5",
+    "@cypress/code-coverage": "^3.14.7",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.1",
     "@testing-library/user-event": "^14.6.1",
@@ -26,9 +33,12 @@
     "@types/react-dom": "^18.2.17",
     "@vitejs/plugin-react": "^4.2.1",
     "babel-jest": "^30.2.0",
+    "cypress": "^15.8.1",
     "identity-obj-proxy": "^3.0.0",
+    "istanbul-lib-coverage": "^3.2.2",
     "jest": "^30.2.0",
     "jest-environment-jsdom": "^30.2.0",
-    "vite": "^5.0.8"
+    "vite": "^5.0.8",
+    "vite-plugin-istanbul": "^7.2.1"
   }
 }

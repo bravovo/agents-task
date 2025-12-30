@@ -43,6 +43,10 @@ Thumbs.db
 # Testing
 coverage/
 .nyc_output/
+cypress/videos/
+cypress/screenshots/
+.nyc_output/
+coverage-e2e/
 
 # Temporary files
 *.tmp

@@ -1,0 +1,26 @@
+{
+  "all": true,
+  "check-coverage": false,
+  "reporter": [
+    "text",
+    "text-summary",
+    "html",
+    "lcov",
+    "json-summary"
+  ],
+  "report-dir": "coverage-e2e",
+  "include": [
+    "src/**/*.{js,jsx}"
+  ],
+  "exclude": [
+    "src/**/*.test.{js,jsx}",
+    "src/**/*.e2e.test.{js,jsx}",
+    "src/main.jsx",
+    "src/setupTests.js",
+    "coverage/**",
+    "cypress/**",
+    "node_modules/**"
+  ],
+  "temp-dir": ".nyc_output"
+}
+
