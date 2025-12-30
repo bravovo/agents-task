@@ -83,7 +83,24 @@ Run tests in watch mode:
 npm run test:watch
 ```
 
-The test suite includes 40 comprehensive unit tests covering all CRUD operations with:
+The test suite includes 72 comprehensive tests:
+
+**Utility Tests (40 tests)** - `src/todoUtils.js`
+- Create, Read, Update, Delete operations
+- Complete, Restore, Archive management
+- Search and filter functionality
+- Edge cases: empty inputs, whitespace validation, non-existent IDs
+
+**Component Tests (32 tests)** - `src/App.jsx`
+- Initial rendering and UI elements
+- Adding, editing, and deleting todos
+- Completing and restoring todos
+- Searching and filtering by text and categories
+- Theme toggle (light/dark mode)
+- View toggle (Active/Archive)
+- Full workflow integration tests
+
+**Coverage:**
 - **100%** Statement Coverage
 - **90.47%** Branch Coverage
 - **100%** Function Coverage
