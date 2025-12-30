@@ -12,6 +12,8 @@ dist
 dist-ssr
 *.local
 coverage
+coverage-e2e
+.nyc_output
 
 # Editor directories and files
 .vscode/*
@@ -23,3 +25,8 @@ coverage
 *.njsproj
 *.sln
 *.sw?
+
+# Cypress
+cypress/screenshots
+cypress/videos
+cypress/downloads

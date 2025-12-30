@@ -1,0 +1,28 @@
+{
+  "all": true,
+  "include": [
+    "src/**/*.js",
+    "src/**/*.jsx"
+  ],
+  "exclude": [
+    "**/__tests__/**",
+    "**/*.test.js",
+    "**/*.test.jsx",
+    "src/main.jsx",
+    "cypress/**"
+  ],
+  "reporter": [
+    "text",
+    "text-summary",
+    "html",
+    "lcov",
+    "json"
+  ],
+  "report-dir": "coverage-e2e",
+  "extension": [
+    ".js",
+    ".jsx"
+  ],
+  "sourceMap": false,
+  "instrument": false
+}
