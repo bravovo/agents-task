@@ -13,20 +13,22 @@ describe('Todo App - Edit Functionality', () => {
     cy.todoShouldExist('Updated text')
   })
 
-  it('should show edit mode with input and buttons', () => {
-    cy.addTodo('Test todo')
-    
-    cy.contains('.todo-item', 'Test todo').within(() => {
-      cy.get('.edit-button').click()
-    })
-    
-    // After clicking edit, check that edit mode is visible
-    cy.contains('.todo-item', 'Test todo').within(() => {
-      cy.get('.edit-input').should('be.visible')
-      cy.get('.save-button').should('be.visible')
-      cy.get('.cancel-button').should('be.visible')
-    })
-  })
+  it("should show edit mode with input and buttons", () => {
+    cy.addTodo("Test todo");
+
+    cy.contains(".todo-text", "Test todo")
+        .closest(".todo-item")
+        .within(() => {
+            cy.get(".edit-button").click();
+        });
+
+    cy.get(".edit-input")
+        .should("be.visible")
+        .should("have.value", "Test todo");
+
+    cy.get(".save-button").should("be.visible");
+    cy.get(".cancel-button").should("be.visible");
+  });
 
   it('should cancel editing without saving changes', () => {
     cy.addTodo('Original todo')
