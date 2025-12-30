@@ -32,7 +32,7 @@ npx cypress install
 
 ### cypress.config.js
 Main Cypress configuration file with:
-- Base URL: `http://localhost:5173`
+- Base URL: `http://localhost:4173`
 - Code coverage setup via `@cypress/code-coverage/task`
 - Video recording disabled (can be enabled if needed)
 - Screenshot on failure enabled
@@ -102,7 +102,7 @@ npm run test:e2e
 
 This will:
 1. Build the application with code instrumentation
-2. Start the preview server on port 5173
+2. Start the preview server on port 4173
 3. Run all Cypress tests
 4. Generate coverage reports in `coverage-e2e/` directory
 5. Shut down the server after tests complete
@@ -326,7 +326,7 @@ cy.get('.todo-item').then(($el) => {
 ### Tests Failing to Start
 
 1. Ensure the build is successful: `npm run build`
-2. Verify port 5173 is available
+2. Verify port 4173 is available
 3. Check that all dependencies are installed
 
 ### Coverage Not Generated
