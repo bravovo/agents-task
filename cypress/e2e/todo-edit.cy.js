@@ -18,6 +18,10 @@ describe('Todo App - Edit Functionality', () => {
     
     cy.contains('.todo-item', 'Test todo').within(() => {
       cy.get('.edit-button').click()
+    })
+    
+    // After clicking edit, check that edit mode is visible
+    cy.contains('.todo-item', 'Test todo').within(() => {
       cy.get('.edit-input').should('be.visible')
       cy.get('.save-button').should('be.visible')
       cy.get('.cancel-button').should('be.visible')
@@ -71,7 +75,15 @@ describe('Todo App - Edit Functionality', () => {
     cy.get('.edit-input').clear()
     cy.get('.save-button').click()
     
-    // Todo should still exist with original text
+    // Should remain in edit mode with empty input
+    cy.get('.edit-input').should('be.visible')
+    cy.get('.save-button').should('be.visible')
+    cy.get('.cancel-button').should('be.visible')
+    
+    // Cancel to exit edit mode
+    cy.get('.cancel-button').click()
+    
+    // Todo should still exist with original text after canceling
     cy.todoShouldExist('Valid todo')
   })
 
