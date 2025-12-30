@@ -133,7 +133,7 @@ export const filterTodos = (todoList, searchText = '', filterCategories = {}) =>
     // Category filters
     const matchesFilters = Object.entries(filterCategories).every(([type, value]) => {
       if (value === 'all') return true;
-      // Include todos without categories when filtering (they won't match specific values)
+      // Exclude todos without categories when filtering by specific values
       if (!todo.categories) return false;
       return todo.categories[type] === value;
     });
