@@ -65,25 +65,21 @@ npm run preview
 
 ## Testing
 
-This project includes comprehensive unit tests and end-to-end (E2E) integration tests using Jest and React Testing Library.
+This project includes comprehensive unit tests and end-to-end (E2E) integration tests.
 
 ### Test Files
 
-- **`src/App.test.jsx`** - Unit tests for individual components and functions
-- **`src/App.e2e.test.jsx`** - End-to-end integration tests simulating complete user workflows
+- **`src/App.test.jsx`** - Unit tests for individual components and functions (Jest + React Testing Library)
+- **`cypress/e2e/todo-app.cy.js`** - End-to-end integration tests using Cypress (simulating complete user workflows in a real browser)
 
 ### Run Tests
 
-Run all tests once (both unit and E2E tests):
+#### Unit Tests (Jest)
+
+Run all unit tests once:
 
 ```bash
 npm test
-```
-
-Run only E2E tests:
-
-```bash
-npm test -- App.e2e.test.jsx
 ```
 
 Run only unit tests:
@@ -98,9 +94,42 @@ Run tests in watch mode (automatically re-runs on file changes):
 npm run test:watch
 ```
 
+#### End-to-End Tests (Cypress)
+
+**Important**: Before running Cypress E2E tests, make sure the development server is running:
+
+```bash
+# In one terminal, start the dev server
+npm run dev
+```
+
+Then, in another terminal, run Cypress tests:
+
+**Run Cypress tests in headless mode (CI-friendly):**
+```bash
+npm run test:e2e
+```
+
+**Open Cypress Test Runner (interactive GUI):**
+```bash
+npm run test:e2e:open
+```
+
+**Run Cypress tests with code coverage:**
+```bash
+npm run test:e2e:coverage        # Headless mode with coverage
+npm run test:e2e:coverage:open   # Interactive mode with coverage
+```
+
+Or use the direct Cypress commands:
+```bash
+npm run cypress:run    # Headless mode
+npm run cypress:open   # Interactive mode
+```
+
 ### End-to-End Tests
 
-The E2E tests (`src/App.e2e.test.jsx`) simulate complete user workflows and include:
+The E2E tests (`cypress/e2e/todo-app.cy.js`) use Cypress to simulate complete user workflows in a real browser and include:
 
 1. **Main E2E Scenario**: Complete todo lifecycle
    - Create todo → Edit todo with new category → Complete todo → Search in archive → Uncomplete → Delete
@@ -133,14 +162,16 @@ The E2E tests (`src/App.e2e.test.jsx`) simulate complete user workflows and incl
 
 ### Test Coverage
 
-Generate a coverage report:
+#### Unit Test Coverage (Jest)
+
+Generate a coverage report for unit tests:
 
 ```bash
 npm run test:coverage
 ```
 
 This will:
-- Run all tests
+- Run all unit tests
 - Generate coverage reports in multiple formats:
   - **Text summary** in the terminal
   - **HTML report** in `coverage/index.html` (open in browser for detailed view)
@@ -153,15 +184,44 @@ Run tests with coverage in watch mode:
 npm run test:coverage:watch
 ```
 
+#### End-to-End Test Coverage (Cypress)
+
+Generate a coverage report for E2E tests:
+
+**Important**: Before running Cypress tests with coverage, make sure the development server is running:
+
+```bash
+# In one terminal, start the dev server
+npm run dev
+```
+
+Then, in another terminal, run Cypress tests with coverage:
+
+```bash
+npm run test:e2e:coverage        # Headless mode
+npm run test:e2e:coverage:open   # Interactive mode
+```
+
+This will:
+- Run all Cypress E2E tests
+- Collect code coverage data from the application
+- Generate coverage reports in `coverage-e2e/` directory:
+  - **Text summary** in the terminal
+  - **HTML report** in `coverage-e2e/index.html` (open in browser for detailed view)
+  - **LCOV report** in `coverage-e2e/lcov.info` (for CI/CD integration)
+  - **JSON summary** in `coverage-e2e/coverage-summary.json`
+
 ### Coverage Thresholds
 
-The project maintains minimum coverage thresholds:
+The project maintains minimum coverage thresholds for unit tests:
 - **Branches**: 60%
 - **Functions**: 70%
 - **Lines**: 75%
 - **Statements**: 75%
 
 ### Viewing Coverage Reports
+
+#### Unit Test Coverage
 
 After running `npm run test:coverage`, open the HTML report:
 
@@ -175,7 +235,21 @@ start coverage/index.html
 # Or simply navigate to the file in your file explorer
 ```
 
-The HTML report provides:
+#### E2E Test Coverage
+
+After running `npm run test:e2e:coverage`, open the HTML report:
+
+```bash
+# On macOS/Linux
+open coverage-e2e/index.html
+
+# On Windows
+start coverage-e2e/index.html
+
+# Or simply navigate to the file in your file explorer
+```
+
+The HTML reports provide:
 - Line-by-line coverage highlighting
 - File-by-file coverage breakdown
 - Interactive navigation through the codebase
@@ -187,11 +261,19 @@ src/
 ├── main.jsx          # Application entry point
 ├── App.jsx           # Main app component with todo state management
 ├── App.css           # Styles with white and beige theme
-├── App.test.jsx      # Unit tests for App component
-├── App.e2e.test.jsx  # End-to-end integration tests
+├── App.test.jsx      # Unit tests for App component (Jest)
+├── App.e2e.test.jsx  # Legacy E2E tests (Jest) - replaced by Cypress
 ├── setupTests.js     # Jest test setup configuration
 └── components/
     └── TodoList.jsx  # Component for displaying todos
+
+cypress/
+├── e2e/
+│   └── todo-app.cy.js  # Cypress end-to-end tests
+├── support/
+│   ├── e2e.js         # Cypress support file
+│   └── commands.js    # Custom Cypress commands
+└── fixtures/          # Test fixtures (if needed)
 ```
 
 ## Technologies Used
@@ -202,8 +284,9 @@ src/
 - CSS3
 
 ### Testing
-- Jest - Testing framework
-- React Testing Library - Component testing utilities
-- @testing-library/user-event - User interaction simulation
-- @testing-library/jest-dom - DOM matchers for Jest
+- **Jest** - Unit testing framework
+- **React Testing Library** - Component testing utilities
+- **@testing-library/user-event** - User interaction simulation
+- **@testing-library/jest-dom** - DOM matchers for Jest
+- **Cypress** - End-to-end testing framework
 

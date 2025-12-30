@@ -63,7 +63,15 @@ function App() {
   const [searchCategories, setSearchCategories] = useState([])
   const [isDarkTheme, setIsDarkTheme] = useState(() => {
     const savedTheme = localStorage.getItem(STORAGE_KEYS.THEME)
-    return savedTheme ? savedTheme === 'dark' : false
+    if (!savedTheme) return false
+    try {
+      // Parse JSON since saveToStorage uses JSON.stringify
+      const parsed = JSON.parse(savedTheme)
+      return parsed === 'dark'
+    } catch {
+      // Fallback for non-JSON values (backward compatibility)
+      return savedTheme === 'dark'
+    }
   })
 
   // Save todos to localStorage whenever they change
