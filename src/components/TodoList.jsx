@@ -1,3 +1,6 @@
+import CategorySelection from './CategorySelection'
+import { getCategoryType, getCategoryValuesByType } from '../utils/categories'
+
 function TodoList({ 
   todos, 
   onDelete, 
@@ -11,10 +14,6 @@ function TodoList({
   editCategories,
   setEditText,
   setEditCategories,
-  handleCategoryChange,
-  getCategoryType,
-  getCategoryValuesByType,
-  CATEGORIES,
   isArchive = false,
   hasActiveSearch = false
 }) {
@@ -82,56 +81,10 @@ function TodoList({
                   className="todo-input"
                   autoFocus
                 />
-                <div className="category-selection">
-                  <div className="category-group">
-                    <label className="category-group-label">Priority:</label>
-                    <div className="category-checkboxes">
-                      {CATEGORIES.priority.map(cat => (
-                        <label key={cat.value} className="category-checkbox-label">
-                          <input
-                            type="checkbox"
-                            checked={editCategories.includes(cat.value)}
-                            onChange={() => handleEditCategoryChange(cat.value)}
-                            className="category-checkbox"
-                          />
-                          <span>{cat.label}</span>
-                        </label>
-                      ))}
-                    </div>
-                  </div>
-                  <div className="category-group">
-                    <label className="category-group-label">Time:</label>
-                    <div className="category-checkboxes">
-                      {CATEGORIES.time.map(cat => (
-                        <label key={cat.value} className="category-checkbox-label">
-                          <input
-                            type="checkbox"
-                            checked={editCategories.includes(cat.value)}
-                            onChange={() => handleEditCategoryChange(cat.value)}
-                            className="category-checkbox"
-                          />
-                          <span>{cat.label}</span>
-                        </label>
-                      ))}
-                    </div>
-                  </div>
-                  <div className="category-group">
-                    <label className="category-group-label">Progress:</label>
-                    <div className="category-checkboxes">
-                      {CATEGORIES.progress.map(cat => (
-                        <label key={cat.value} className="category-checkbox-label">
-                          <input
-                            type="checkbox"
-                            checked={editCategories.includes(cat.value)}
-                            onChange={() => handleEditCategoryChange(cat.value)}
-                            className="category-checkbox"
-                          />
-                          <span>{cat.label}</span>
-                        </label>
-                      ))}
-                    </div>
-                  </div>
-                </div>
+                <CategorySelection
+                  selectedCategories={editCategories}
+                  onCategoryChange={handleEditCategoryChange}
+                />
                 <div className="edit-actions">
                   <button type="submit" className="save-button">
                     Save

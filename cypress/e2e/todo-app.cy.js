@@ -286,6 +286,479 @@ describe('Todo App - End-to-End Tests', () => {
     })
   })
 
+  describe('E2E Scenario: Comprehensive Todo Editing Tests', () => {
+    describe('Editing Todo Text', () => {
+      it('should edit todo text without changing categories', () => {
+        // Create a todo with default categories
+        cy.get('input[placeholder="Add a new todo..."]').type('Original text')
+        cy.contains('button', 'Add Todo').click()
+
+        cy.contains('Original text').should('be.visible')
+        cy.contains('medium').should('be.visible')
+
+        // Edit the text
+        cy.get('button[aria-label="Edit todo"]').click()
+        cy.get('input[placeholder="Edit todo..."]').clear().type('Updated text')
+        cy.contains('button', /^save$/i).click()
+
+        // Verify text changed but categories remain
+        cy.contains('Updated text').should('be.visible')
+        cy.contains('Original text').should('not.exist')
+        cy.contains('medium').should('be.visible')
+      })
+
+      it('should trim whitespace when editing todo text', () => {
+        cy.get('input[placeholder="Add a new todo..."]').type('Original')
+        cy.contains('button', 'Add Todo').click()
+
+        cy.get('button[aria-label="Edit todo"]').click()
+        cy.get('input[placeholder="Edit todo..."]').clear().type('  Trimmed text  ')
+        cy.contains('button', /^save$/i).click()
+
+        cy.contains('Trimmed text').should('be.visible')
+        cy.contains('  Trimmed text  ').should('not.exist')
+      })
+
+      it('should not save edit with empty text', () => {
+        cy.get('input[placeholder="Add a new todo..."]').type('Original')
+        cy.contains('button', 'Add Todo').click()
+
+        cy.contains('Original').should('be.visible')
+
+        cy.get('button[aria-label="Edit todo"]').click()
+        cy.get('input[placeholder="Edit todo..."]').clear()
+        cy.contains('button', /^save$/i).click()
+
+        // Edit form should still be visible (validation prevents save)
+        // The input should be empty and the form should remain open
+        cy.get('input[placeholder="Edit todo..."]').should('be.visible')
+        cy.get('input[placeholder="Edit todo..."]').should('have.value', '')
+        cy.contains('button', /^save$/i).should('be.visible')
+        cy.contains('button', /cancel/i).should('be.visible')
+        
+        // Original text should not be visible because edit form is still open
+        cy.contains('Original').should('not.exist')
+        
+        // Cancel to verify original text is preserved
+        cy.contains('button', /cancel/i).click()
+        cy.contains('Original').should('be.visible')
+      })
+    })
+
+    describe('Editing Priority Categories', () => {
+      it('should change priority from medium to high', () => {
+        cy.get('input[placeholder="Add a new todo..."]').type('Priority test')
+        cy.contains('button', 'Add Todo').click()
+
+        cy.contains('medium').should('be.visible')
+
+        cy.get('button[aria-label="Edit todo"]').click()
+        cy.get('.todo-edit-form').within(() => {
+          cy.get('label').contains('High').click()
+        })
+        cy.contains('button', /^save$/i).click()
+
+        cy.contains('high').should('be.visible')
+        cy.contains('medium').should('not.exist')
+      })
+
+      it('should change priority from high to critical', () => {
+        // Create todo with high priority
+        cy.get('.todo-form').within(() => {
+          cy.get('label').contains('High').click()
+        })
+        cy.get('input[placeholder="Add a new todo..."]').type('High priority task')
+        cy.contains('button', 'Add Todo').click()
+
+        cy.contains('high').should('be.visible')
+
+        cy.get('button[aria-label="Edit todo"]').click()
+        cy.get('.todo-edit-form').within(() => {
+          cy.get('label').contains('Critical').click()
+        })
+        cy.contains('button', /^save$/i).click()
+
+        cy.contains('critical').should('be.visible')
+        cy.contains('high').should('not.exist')
+      })
+
+      it('should change priority from low to medium', () => {
+        cy.get('.todo-form').within(() => {
+          cy.get('label').contains('Low').click()
+        })
+        cy.get('input[placeholder="Add a new todo..."]').type('Low priority task')
+        cy.contains('button', 'Add Todo').click()
+
+        cy.contains('low').should('be.visible')
+
+        cy.get('button[aria-label="Edit todo"]').click()
+        cy.get('.todo-edit-form').within(() => {
+          cy.get('label').contains('Medium').click()
+        })
+        cy.contains('button', /^save$/i).click()
+
+        cy.contains('medium').should('be.visible')
+        cy.contains('low').should('not.exist')
+      })
+
+      it('should maintain at least one priority category when unchecking', () => {
+        cy.get('.todo-form').within(() => {
+          cy.get('label').contains('High').click()
+        })
+        cy.get('input[placeholder="Add a new todo..."]').type('Priority constraint test')
+        cy.contains('button', 'Add Todo').click()
+
+        cy.contains('high').should('be.visible')
+
+        cy.get('button[aria-label="Edit todo"]').click()
+        // Try to uncheck high priority (should default back to medium)
+        cy.get('.todo-edit-form').within(() => {
+          cy.get('label').contains('High').click()
+        })
+        cy.contains('button', /^save$/i).click()
+
+        // Should default to medium when removing the last priority
+        cy.contains('medium').should('be.visible')
+        cy.contains('high').should('not.exist')
+      })
+
+      it('should replace priority category when changing from one to another', () => {
+        cy.get('.todo-form').within(() => {
+          cy.get('label').contains('Low').click()
+        })
+        cy.get('input[placeholder="Add a new todo..."]').type('Replace priority test')
+        cy.contains('button', 'Add Todo').click()
+
+        cy.contains('low').should('be.visible')
+
+        cy.get('button[aria-label="Edit todo"]').click()
+        cy.get('.todo-edit-form').within(() => {
+          cy.get('label').contains('Critical').click()
+        })
+        cy.contains('button', /^save$/i).click()
+
+        // Should only have one priority category
+        cy.contains('critical').should('be.visible')
+        cy.contains('low').should('not.exist')
+        // Verify only one priority badge exists
+        cy.get('.category-badge').contains(/^(critical|high|medium|low)$/).should('have.length', 1)
+      })
+    })
+
+    describe('Editing Time Categories', () => {
+      it('should change time category from urgent to today', () => {
+        cy.get('.todo-form').within(() => {
+          cy.get('label').contains('Urgent').click()
+        })
+        cy.get('input[placeholder="Add a new todo..."]').type('Time category test')
+        cy.contains('button', 'Add Todo').click()
+
+        cy.contains('urgent').should('be.visible')
+
+        cy.get('button[aria-label="Edit todo"]').click()
+        cy.get('.todo-edit-form').within(() => {
+          cy.get('label').contains('Today').click()
+        })
+        cy.contains('button', /^save$/i).click()
+
+        cy.contains('today').should('be.visible')
+        cy.contains('urgent').should('not.exist')
+      })
+
+      it('should change time category from today to this-week', () => {
+        cy.get('.todo-form').within(() => {
+          cy.get('label').contains('Today').click()
+        })
+        cy.get('input[placeholder="Add a new todo..."]').type('Today to this week')
+        cy.contains('button', 'Add Todo').click()
+
+        cy.contains('today').should('be.visible')
+
+        cy.get('button[aria-label="Edit todo"]').click()
+        cy.get('.todo-edit-form').within(() => {
+          cy.get('label').contains('This Week').click()
+        })
+        cy.contains('button', /^save$/i).click()
+
+        cy.contains('this week').should('be.visible')
+        cy.contains('today').should('not.exist')
+      })
+
+      it('should change time category from this-week to later', () => {
+        cy.get('.todo-form').within(() => {
+          cy.get('label').contains('This Week').click()
+        })
+        cy.get('input[placeholder="Add a new todo..."]').type('This week to later')
+        cy.contains('button', 'Add Todo').click()
+
+        cy.contains('this week').should('be.visible')
+
+        cy.get('button[aria-label="Edit todo"]').click()
+        cy.get('.todo-edit-form').within(() => {
+          cy.get('label').contains('Later').click()
+        })
+        cy.contains('button', /^save$/i).click()
+
+        cy.contains('later').should('be.visible')
+        cy.contains('this week').should('not.exist')
+      })
+
+      it('should replace time category when changing from one to another', () => {
+        cy.get('.todo-form').within(() => {
+          cy.get('label').contains('Urgent').click()
+        })
+        cy.get('input[placeholder="Add a new todo..."]').type('Replace time test')
+        cy.contains('button', 'Add Todo').click()
+
+        cy.contains('urgent').should('be.visible')
+
+        cy.get('button[aria-label="Edit todo"]').click()
+        cy.get('.todo-edit-form').within(() => {
+          cy.get('label').contains('Later').click()
+        })
+        cy.contains('button', /^save$/i).click()
+
+        // Should only have one time category
+        cy.contains('later').should('be.visible')
+        cy.contains('urgent').should('not.exist')
+      })
+    })
+
+    describe('Editing Progress Categories', () => {
+      it('should change progress category from not-started to in-progress', () => {
+        cy.get('.todo-form').within(() => {
+          cy.get('label').contains('Not Started').click()
+        })
+        cy.get('input[placeholder="Add a new todo..."]').type('Progress category test')
+        cy.contains('button', 'Add Todo').click()
+
+        cy.contains('not started').should('be.visible')
+
+        cy.get('button[aria-label="Edit todo"]').click()
+        cy.get('.todo-edit-form').within(() => {
+          cy.get('label').contains('In Progress').click()
+        })
+        cy.contains('button', /^save$/i).click()
+
+        cy.contains('in progress').should('be.visible')
+        cy.contains('not started').should('not.exist')
+      })
+
+      it('should change progress category from in-progress to blocked', () => {
+        cy.get('.todo-form').within(() => {
+          cy.get('label').contains('In Progress').click()
+        })
+        cy.get('input[placeholder="Add a new todo..."]').type('In progress to blocked')
+        cy.contains('button', 'Add Todo').click()
+
+        cy.contains('in progress').should('be.visible')
+
+        cy.get('button[aria-label="Edit todo"]').click()
+        cy.get('.todo-edit-form').within(() => {
+          cy.get('label').contains('Blocked').click()
+        })
+        cy.contains('button', /^save$/i).click()
+
+        cy.contains('blocked').should('be.visible')
+        cy.contains('in progress').should('not.exist')
+      })
+
+      it('should replace progress category when changing from one to another', () => {
+        cy.get('.todo-form').within(() => {
+          cy.get('label').contains('Not Started').click()
+        })
+        cy.get('input[placeholder="Add a new todo..."]').type('Replace progress test')
+        cy.contains('button', 'Add Todo').click()
+
+        cy.contains('not started').should('be.visible')
+
+        cy.get('button[aria-label="Edit todo"]').click()
+        cy.get('.todo-edit-form').within(() => {
+          cy.get('label').contains('Blocked').click()
+        })
+        cy.contains('button', /^save$/i).click()
+
+        // Should only have one progress category
+        cy.contains('blocked').should('be.visible')
+        cy.contains('not started').should('not.exist')
+      })
+    })
+
+    describe('Editing Multiple Categories Simultaneously', () => {
+      it('should change multiple categories at once', () => {
+        cy.get('input[placeholder="Add a new todo..."]').type('Multiple category change')
+        cy.contains('button', 'Add Todo').click()
+
+        cy.contains('medium').should('be.visible')
+
+        cy.get('button[aria-label="Edit todo"]').click()
+        cy.get('.todo-edit-form').within(() => {
+          // Change priority to critical
+          cy.get('label').contains('Critical').click()
+          // Change time to this-week
+          cy.get('label').contains('This Week').click()
+          // Change progress to blocked
+          cy.get('label').contains('Blocked').click()
+        })
+        cy.contains('button', /^save$/i).click()
+
+        cy.contains('critical').should('be.visible')
+        cy.contains('this week').should('be.visible')
+        cy.contains('blocked').should('be.visible')
+        cy.contains('medium').should('not.exist')
+      })
+
+      it('should preserve existing categories when only changing text', () => {
+        // Create todo with specific categories
+        cy.get('.todo-form').within(() => {
+          cy.get('label').contains('High').click()
+          cy.get('label').contains('Urgent').click()
+        })
+        cy.get('input[placeholder="Add a new todo..."]').type('Original text')
+        cy.contains('button', 'Add Todo').click()
+
+        cy.contains('high').should('be.visible')
+        cy.contains('urgent').should('be.visible')
+
+        // Edit only the text, not categories
+        cy.get('button[aria-label="Edit todo"]').click()
+        cy.get('input[placeholder="Edit todo..."]').clear().type('Updated text')
+        cy.contains('button', /^save$/i).click()
+
+        // Categories should be preserved
+        cy.contains('Updated text').should('be.visible')
+        cy.contains('high').should('be.visible')
+        cy.contains('urgent').should('be.visible')
+      })
+
+      it('should change from low priority to high and add time category', () => {
+        cy.get('.todo-form').within(() => {
+          cy.get('label').contains('Low').click()
+        })
+        cy.get('input[placeholder="Add a new todo..."]').type('Upgrade priority')
+        cy.contains('button', 'Add Todo').click()
+
+        cy.contains('low').should('be.visible')
+
+        cy.get('button[aria-label="Edit todo"]').click()
+        cy.get('.todo-edit-form').within(() => {
+          // Change priority to high
+          cy.get('label').contains('High').click()
+          // Add urgent time category
+          cy.get('label').contains('Urgent').click()
+        })
+        cy.contains('button', /^save$/i).click()
+
+        cy.contains('high').should('be.visible')
+        cy.contains('urgent').should('be.visible')
+        cy.contains('low').should('not.exist')
+      })
+    })
+
+    describe('Category Editing Edge Cases', () => {
+      it('should cancel category changes when canceling edit', () => {
+        cy.get('input[placeholder="Add a new todo..."]').type('Cancel category test')
+        cy.contains('button', 'Add Todo').click()
+
+        cy.contains('medium').should('be.visible')
+
+        cy.get('button[aria-label="Edit todo"]').click()
+        cy.get('.todo-edit-form').within(() => {
+          cy.get('label').contains('Critical').click()
+        })
+        // Cancel instead of saving
+        cy.contains('button', /cancel/i).click()
+
+        // Original category should still be there
+        cy.contains('medium').should('be.visible')
+        cy.contains('critical').should('not.exist')
+      })
+
+      it('should handle editing todo with all three category types', () => {
+        // Create todo with priority, time, and progress categories
+        cy.get('.todo-form').within(() => {
+          cy.get('label').contains('High').click()
+          cy.get('label').contains('Urgent').click()
+          cy.get('label').contains('In Progress').click()
+        })
+        cy.get('input[placeholder="Add a new todo..."]').type('Full category todo')
+        cy.contains('button', 'Add Todo').click()
+
+        cy.contains('high').should('be.visible')
+        cy.contains('urgent').should('be.visible')
+        cy.contains('in progress').should('be.visible')
+
+        // Edit and change all categories
+        cy.get('button[aria-label="Edit todo"]').click()
+        cy.get('.todo-edit-form').within(() => {
+          // Change priority to critical
+          cy.get('label').contains('Critical').click()
+          // Change time to later
+          cy.get('label').contains('Later').click()
+          // Change progress to blocked
+          cy.get('label').contains('Blocked').click()
+        })
+        cy.contains('button', /^save$/i).click()
+
+        cy.contains('critical').should('be.visible')
+        cy.contains('later').should('be.visible')
+        cy.contains('blocked').should('be.visible')
+        cy.contains('high').should('not.exist')
+        cy.contains('urgent').should('not.exist')
+        cy.contains('in progress').should('not.exist')
+      })
+
+      it('should handle rapid category changes', () => {
+        cy.get('input[placeholder="Add a new todo..."]').type('Rapid changes')
+        cy.contains('button', 'Add Todo').click()
+
+        // Edit and change categories multiple times quickly
+        cy.get('button[aria-label="Edit todo"]').click()
+        cy.get('.todo-edit-form').within(() => {
+          cy.get('label').contains('High').click()
+          cy.get('label').contains('Critical').click() // Should replace high
+          cy.get('label').contains('Low').click() // Should replace critical
+        })
+        cy.contains('button', /^save$/i).click()
+
+        // Should only have low priority (last one selected)
+        cy.contains('low').should('be.visible')
+        cy.contains('critical').should('not.exist')
+        cy.contains('high').should('not.exist')
+      })
+
+      it('should maintain category state when editing multiple todos', () => {
+        // Create first todo
+        cy.get('.todo-form').within(() => {
+          cy.get('label').contains('High').click()
+        })
+        cy.get('input[placeholder="Add a new todo..."]').type('First todo')
+        cy.contains('button', 'Add Todo').click()
+
+        // Create second todo
+        cy.get('.todo-form').within(() => {
+          cy.get('label').contains('Low').click()
+        })
+        cy.get('input[placeholder="Add a new todo..."]').type('Second todo')
+        cy.contains('button', 'Add Todo').click()
+
+        // Edit first todo
+        cy.get('button[aria-label="Edit todo"]').first().click()
+        cy.get('.todo-edit-form').within(() => {
+          cy.get('label').contains('Critical').click()
+        })
+        cy.contains('button', /^save$/i).click()
+
+        // Verify first todo changed
+        cy.contains('First todo').parent().should('contain', 'critical')
+        cy.contains('First todo').parent().should('not.contain', 'high')
+
+        // Verify second todo unchanged
+        cy.contains('Second todo').parent().should('contain', 'low')
+      })
+    })
+  })
+
   describe('E2E Scenario: Archive to Active and Back', () => {
     it('should move todo between active and archive multiple times', () => {
       cy.get('input[placeholder="Add a new todo..."]').type('Back and forth task')

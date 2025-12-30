@@ -15,6 +15,7 @@ export default {
     'src/**/*.{js,jsx}',
     '!src/main.jsx',
     '!src/setupTests.js',
+    '!src/__tests__/**',
   ],
   coverageDirectory: 'coverage',
   coverageReporters: ['text', 'lcov', 'html', 'json-summary'],
