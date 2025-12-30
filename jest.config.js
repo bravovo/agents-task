@@ -11,7 +11,6 @@ export default {
   collectCoverageFrom: [
     'src/**/*.{js,jsx}',
     '!src/main.jsx',
-    '!src/App.jsx',
     '!src/**/*.test.{js,jsx}',
     '!src/**/__tests__/**',
   ],
