@@ -7,10 +7,13 @@
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
-    "preview": "vite preview",
+    "preview": "vite preview --port 4173",
     "test": "jest",
     "test:coverage": "jest --coverage",
-    "test:watch": "jest --watch"
+    "test:watch": "jest --watch",
+    "cypress:open": "cypress open",
+    "cypress:run": "cypress run",
+    "test:e2e": "npm run build && start-server-and-test preview http://localhost:4173 'cypress run'"
   },
   "dependencies": {
     "react": "^19.2.0",
@@ -19,6 +22,7 @@
   "devDependencies": {
     "@babel/preset-env": "^7.28.5",
     "@babel/preset-react": "^7.28.5",
+    "@cypress/code-coverage": "^3.14.7",
     "@eslint/js": "^9.39.1",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.1",
@@ -27,12 +31,17 @@
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^5.1.1",
     "babel-jest": "^30.2.0",
+    "babel-plugin-istanbul": "^7.0.1",
+    "cypress": "^15.8.1",
     "eslint": "^9.39.1",
     "eslint-plugin-react-hooks": "^7.0.1",
     "eslint-plugin-react-refresh": "^0.4.24",
     "globals": "^16.5.0",
     "jest": "^30.2.0",
     "jest-environment-jsdom": "^30.2.0",
-    "vite": "^7.2.4"
+    "nyc": "^17.1.0",
+    "start-server-and-test": "^2.1.3",
+    "vite": "^7.2.4",
+    "vite-plugin-istanbul": "^7.2.1"
   }
 }

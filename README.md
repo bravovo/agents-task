@@ -111,6 +111,82 @@ Coverage reports are generated in the `coverage/` directory and include:
 - LCOV report: `coverage/lcov.info`
 - Text summary in terminal output
 
+### End-to-End Testing with Cypress
+
+Run E2E tests in interactive mode:
+
+```bash
+npm run cypress:open
+```
+
+Run E2E tests headless:
+
+```bash
+npm run cypress:run
+```
+
+Run E2E tests with code coverage:
+
+```bash
+npm run test:e2e
+```
+
+The E2E test suite includes 6 comprehensive test files covering:
+
+**CRUD Operations** - `cypress/e2e/todo-crud.cy.js`
+- Display app title and initial UI
+- Add todos with default and custom categories
+- Add multiple todos
+- Validation (empty inputs, whitespace trimming)
+- Delete todos
+- Todo count updates
+
+**Edit Functionality** - `cypress/e2e/todo-edit.cy.js`
+- Edit todo text
+- Edit mode UI (input, save, cancel buttons)
+- Cancel editing without saving
+- Edit todo categories
+- Validation (prevent saving empty text)
+- Edit multiple todos independently
+
+**Archive and Restore** - `cypress/e2e/todo-archive.cy.js`
+- Complete todos and move to archive
+- Strike-through display for completed items
+- Restore todos from archive
+- Delete from archive
+- Preserve categories during complete/restore
+- Multiple archived todos
+
+**Search and Filter** - `cypress/e2e/todo-search-filter.cy.js`
+- Search by text (case-insensitive)
+- Filter by priority, time, and progress
+- Combine multiple filters
+- Combine search and filters
+- Filter archived todos
+- Empty state messages
+
+**Theme Toggle** - `cypress/e2e/todo-theme.cy.js`
+- Display theme toggle button
+- Toggle between light and dark themes
+- Persist theme in localStorage
+- Restore theme on page reload
+- Maintain theme during operations
+
+**Integration Workflows** - `cypress/e2e/todo-integration.cy.js`
+- Complete todo workflow (add, edit, complete, restore)
+- Multiple todos with different workflows
+- Search/filter with active operations
+- Data integrity across view switches
+- Rapid successive operations
+- Theme persistence during operations
+
+**E2E Coverage:**
+E2E test coverage reports are generated in the `coverage-e2e/` directory and include:
+- HTML report: `coverage-e2e/index.html`
+- LCOV report: `coverage-e2e/lcov.info`
+- JSON report: `coverage-e2e/coverage-final.json`
+- Text summary in terminal output
+
 ## Project Structure
 
 ```
@@ -120,10 +196,16 @@ Coverage reports are generated in the `coverage/` directory and include:
 │   ├── main.jsx         # Application entry point
 │   ├── index.css        # Global styles
 │   └── assets/          # Static assets (images, icons)
+├── cypress/
+│   ├── e2e/             # End-to-end test files
+│   ├── support/         # Custom commands and configuration
+│   └── fixtures/        # Test fixtures
 ├── public/              # Public static files
 ├── index.html           # HTML template
 ├── vite.config.js       # Vite configuration
+├── cypress.config.js    # Cypress configuration
 ├── eslint.config.js     # ESLint configuration
+├── .nycrc               # NYC coverage configuration
 └── package.json         # Project dependencies and scripts
 ```
 
@@ -135,6 +217,7 @@ Coverage reports are generated in the `coverage/` directory and include:
 - ♿️ Accessibility-focused markup
 - 🔍 ESLint for code quality
 - 🎯 Optimized production builds
+- 🧪 Comprehensive unit and E2E testing with code coverage
 
 ## Code Quality
 
@@ -142,6 +225,8 @@ Coverage reports are generated in the `coverage/` directory and include:
 - Modern React patterns (functional components, hooks)
 - Accessible markup with ARIA attributes
 - Secure external links with proper rel attributes
+- 100% unit test coverage
+- Comprehensive E2E test coverage
 
 ## Browser Support
 
@@ -160,3 +245,5 @@ This project is private and not licensed for public use.
 
 - [Vite Documentation](https://vite.dev)
 - [React Documentation](https://react.dev)
+- [Cypress Documentation](https://docs.cypress.io)
+
