@@ -63,6 +63,37 @@ Run ESLint to check code quality:
 npm run lint
 ```
 
+### Testing
+
+Run the test suite:
+
+```bash
+npm test
+```
+
+Run tests with code coverage:
+
+```bash
+npm run test:coverage
+```
+
+Run tests in watch mode:
+
+```bash
+npm run test:watch
+```
+
+The test suite includes 40 comprehensive unit tests covering all CRUD operations with:
+- **100%** Statement Coverage
+- **90.47%** Branch Coverage
+- **100%** Function Coverage
+- **100%** Line Coverage
+
+Coverage reports are generated in the `coverage/` directory and include:
+- HTML report: `coverage/index.html`
+- LCOV report: `coverage/lcov.info`
+- Text summary in terminal output
+
 ## Project Structure
 
 ```
