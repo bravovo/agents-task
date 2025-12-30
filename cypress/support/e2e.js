@@ -8,7 +8,7 @@ import './commands'
 // Example: Cypress.Commands.add('login', (email, password) => { ... })
 
 // Prevent Cypress from failing tests on uncaught exceptions
-Cypress.on('uncaught:exception', (err, runnable) => {
+Cypress.on('uncaught:exception', () => {
   // returning false here prevents Cypress from failing the test
   return false
 })
