@@ -7,7 +7,7 @@ export default defineConfig({
   plugins: [
     react(),
     istanbul({
-      include: 'src/*',
+      include: 'src/**/*',
       exclude: ['node_modules', 'test/', 'cypress/'],
       extension: ['.js', '.jsx'],
       requireEnv: false,
