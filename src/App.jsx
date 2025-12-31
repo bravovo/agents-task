@@ -1,33 +1,10 @@
 import { useState, useEffect } from 'react'
 import './App.css'
-
-const categoryTypes = {
-  priority: {
-    label: 'Priority',
-    options: {
-      high: 'High',
-      medium: 'Medium',
-      low: 'Low'
-    }
-  },
-  time: {
-    label: 'Time',
-    options: {
-      today: 'Today',
-      'this-week': 'This Week',
-      'this-month': 'This Month',
-      later: 'Later'
-    }
-  },
-  progress: {
-    label: 'Progress',
-    options: {
-      'not-started': 'Not Started',
-      'in-progress': 'In Progress',
-      blocked: 'Blocked'
-    }
-  }
-}
+import Header from './components/Header'
+import ViewToggle from './components/ViewToggle'
+import SearchFilter from './components/SearchFilter'
+import TodoForm from './components/TodoForm'
+import TodoList from './components/TodoList'
 
 function App() {
   const [todos, setTodos] = useState([])
@@ -184,185 +161,46 @@ function App() {
 
   return (
     <div className={`app ${theme}`}>
-      <div className="header-with-theme">
-        <h1>Todo App</h1>
-        <button 
-          className="theme-toggle"
-          onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}
-          aria-label="Toggle theme"
-        >
-          {theme === 'light' ? '🌙' : '☀️'}
-        </button>
-      </div>
-      <div className="view-toggle">
-        <button 
-          className={`toggle-button ${!showArchive ? 'active' : ''}`}
-          onClick={() => setShowArchive(false)}
-        >
-          Active Todos ({todos.length})
-        </button>
-        <button 
-          className={`toggle-button ${showArchive ? 'active' : ''}`}
-          onClick={() => setShowArchive(true)}
-        >
-          Archive ({archive.length})
-        </button>
-      </div>
-      <div className="search-filter-section">
-        <input
-          type="text"
-          value={searchText}
-          onChange={(e) => setSearchText(e.target.value)}
-          placeholder="Search todos..."
-          className="search-input"
-        />
-        <div className="filter-controls">
-          {Object.entries(categoryTypes).map(([type, config]) => (
-            <div key={type} className="filter-group">
-              <label htmlFor={`filter-${type}`} className="filter-label">
-                {config.label}:
-              </label>
-              <select
-                id={`filter-${type}`}
-                value={filterCategories[type]}
-                onChange={(e) => handleFilterCategoryChange(type, e.target.value)}
-                className="filter-select"
-              >
-                <option value="all">All</option>
-                {Object.entries(config.options).map(([value, label]) => (
-                  <option key={value} value={value}>
-                    {label}
-                  </option>
-                ))}
-              </select>
-            </div>
-          ))}
-        </div>
-      </div>
+      <Header 
+        theme={theme} 
+        onThemeToggle={() => setTheme(theme === 'light' ? 'dark' : 'light')}
+      />
+      <ViewToggle 
+        showArchive={showArchive}
+        onToggle={setShowArchive}
+        todosCount={todos.length}
+        archiveCount={archive.length}
+      />
+      <SearchFilter 
+        searchText={searchText}
+        onSearchChange={setSearchText}
+        filterCategories={filterCategories}
+        onFilterChange={handleFilterCategoryChange}
+      />
       {!showArchive ? (
         <>
-          <form onSubmit={handleSubmit} className="todo-form">
-            <input
-              type="text"
-              value={inputValue}
-              onChange={(e) => setInputValue(e.target.value)}
-              placeholder="Enter a new todo..."
-              className="todo-input"
-            />
-            {Object.entries(categoryTypes).map(([type, config]) => (
-              <div key={type} className="category-group">
-                <label htmlFor={`${type}-select`} className="category-label">
-                  {config.label}:
-                </label>
-                <select
-                  id={`${type}-select`}
-                  value={selectedCategories[type]}
-                  onChange={(e) => handleCategoryChange(type, e.target.value)}
-                  className="category-select"
-                >
-                  {Object.entries(config.options).map(([value, label]) => (
-                    <option key={value} value={value}>
-                      {label}
-                    </option>
-                  ))}
-                </select>
-              </div>
-            ))}
-            <button type="submit" className="submit-button">
-              Add Todo
-            </button>
-          </form>
-          <ul className="todo-list">
-            {filteredTodos.map(todo => (
-              <li key={todo.id} className="todo-item">
-                {editingId === todo.id ? (
-                  <>
-                    <input
-                      type="text"
-                      value={editValue}
-                      onChange={(e) => setEditValue(e.target.value)}
-                      className="edit-input"
-                      autoFocus
-                    />
-                    <div className="edit-categories">
-                      {Object.entries(categoryTypes).map(([type, config]) => (
-                        <div key={type} className="category-group">
-                          <label htmlFor={`edit-${type}-select`} className="category-label">
-                            {config.label}:
-                          </label>
-                          <select
-                            id={`edit-${type}-select`}
-                            value={editCategories[type]}
-                            onChange={(e) => handleEditCategoryChange(type, e.target.value)}
-                            className="category-select"
-                          >
-                            {Object.entries(config.options).map(([value, label]) => (
-                              <option key={value} value={value}>
-                                {label}
-                              </option>
-                            ))}
-                          </select>
-                        </div>
-                      ))}
-                    </div>
-                    <div className="button-group">
-                      <button
-                        onClick={() => handleSave(todo.id)}
-                        className="save-button"
-                      >
-                        Save
-                      </button>
-                      <button
-                        onClick={handleCancelEdit}
-                        className="cancel-button"
-                      >
-                        Cancel
-                      </button>
-                    </div>
-                  </>
-                ) : (
-                  <>
-                    <span className="todo-text">{todo.text}</span>
-                    <div className="category-badges">
-                      {todo.categories && Object.entries(todo.categories).map(([type, value]) => {
-                        const typeConfig = categoryTypes[type]
-                        if (!typeConfig) return null
-                        const label = typeConfig.options[value] || value
-                        return (
-                          <span 
-                            key={`${todo.id}-${type}`} 
-                            className={`category-badge category-${type}-${value}`}
-                          >
-                            {label}
-                          </span>
-                        )
-                      })}
-                    </div>
-                    <div className="button-group">
-                      <button
-                        onClick={() => handleEdit(todo.id, todo.text, todo.categories)}
-                        className="edit-button"
-                      >
-                        Edit
-                      </button>
-                      <button
-                        onClick={() => handleComplete(todo.id)}
-                        className="complete-button"
-                      >
-                        Complete
-                      </button>
-                      <button
-                        onClick={() => handleDelete(todo.id)}
-                        className="delete-button"
-                      >
-                        Delete
-                      </button>
-                    </div>
-                  </>
-                )}
-              </li>
-            ))}
-          </ul>
+          <TodoForm 
+            inputValue={inputValue}
+            onInputChange={setInputValue}
+            selectedCategories={selectedCategories}
+            onCategoryChange={handleCategoryChange}
+            onSubmit={handleSubmit}
+          />
+          <TodoList 
+            todos={filteredTodos}
+            editingId={editingId}
+            editValue={editValue}
+            editCategories={editCategories}
+            isArchived={false}
+            onEdit={handleEdit}
+            onSave={handleSave}
+            onCancel={handleCancelEdit}
+            onEditValueChange={setEditValue}
+            onEditCategoryChange={handleEditCategoryChange}
+            onComplete={handleComplete}
+            onDelete={handleDelete}
+            onRestore={handleRestore}
+          />
           {filteredTodos.length === 0 && todos.length > 0 && (
             <p className="empty-message">No todos match your search or filters.</p>
           )}
@@ -372,42 +210,21 @@ function App() {
         </>
       ) : (
         <>
-          <ul className="todo-list">
-            {filteredArchive.map(todo => (
-              <li key={todo.id} className="todo-item archived">
-                <span className="todo-text completed">{todo.text}</span>
-                <div className="category-badges">
-                  {todo.categories && Object.entries(todo.categories).map(([type, value]) => {
-                    const typeConfig = categoryTypes[type]
-                    if (!typeConfig) return null
-                    const label = typeConfig.options[value] || value
-                    return (
-                      <span 
-                        key={`${todo.id}-${type}`} 
-                        className={`category-badge category-${type}-${value}`}
-                      >
-                        {label}
-                      </span>
-                    )
-                  })}
-                </div>
-                <div className="button-group">
-                  <button
-                    onClick={() => handleRestore(todo.id)}
-                    className="restore-button"
-                  >
-                    Restore
-                  </button>
-                  <button
-                    onClick={() => handleDeleteFromArchive(todo.id)}
-                    className="delete-button"
-                  >
-                    Delete
-                  </button>
-                </div>
-              </li>
-            ))}
-          </ul>
+          <TodoList 
+            todos={filteredArchive}
+            editingId={null}
+            editValue=""
+            editCategories={{}}
+            isArchived={true}
+            onEdit={() => {}}
+            onSave={() => {}}
+            onCancel={() => {}}
+            onEditValueChange={() => {}}
+            onEditCategoryChange={() => {}}
+            onComplete={() => {}}
+            onDelete={handleDeleteFromArchive}
+            onRestore={handleRestore}
+          />
           {filteredArchive.length === 0 && archive.length > 0 && (
             <p className="empty-message">No archived todos match your search or filters.</p>
           )}
