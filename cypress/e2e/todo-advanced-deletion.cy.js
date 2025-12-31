@@ -329,7 +329,7 @@ describe('Todo App - Advanced Deletion Scenarios', () => {
   it('should delete todos with special characters', () => {
     const specialTodos = [
       'Todo with @#$ special chars',
-      'Todo with émojis 🎉🎊',
+      'Todo with emojis 🎉🎊',
       'Todo with "quotes" and \'apostrophes\''
     ]
     

@@ -10,7 +10,7 @@ Comprehensive tests for editing todo categories with various scenarios:
 
 #### Individual Category Editing
 - **Edit only priority**: Change priority while keeping time and progress unchanged
-- **Edit only time**: Change time category while keeping others unchanged  
+- **Edit only time**: Change time category while keeping others unchanged
 - **Edit only progress**: Change progress while keeping others unchanged
 
 #### Bulk Category Operations
