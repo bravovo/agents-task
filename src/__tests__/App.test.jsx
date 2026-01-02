@@ -1021,25 +1021,25 @@ describe('App Component', () => {
   });
 
   describe('Todo Count Display', () => {
-    test('displays count of uncompleted todos in active view', async () => {
+    test('displays count of incomplete todos in active view', async () => {
       const user = userEvent.setup();
       render(<App />);
 
-      // Initially should show 0 uncompleted todos
-      expect(screen.getByText('0 uncompleted todos')).toBeInTheDocument();
+      // Initially should show 0 incomplete todos
+      expect(screen.getByText('0 incomplete todos')).toBeInTheDocument();
 
       // Add a todo
       const input = screen.getByPlaceholderText('Enter a new todo...');
       await user.type(input, 'First task');
       await user.click(screen.getByRole('button', { name: 'Add Todo' }));
 
-      expect(screen.getByText('1 uncompleted todos')).toBeInTheDocument();
+      expect(screen.getByText('1 incomplete todo')).toBeInTheDocument();
 
       // Add another todo
       await user.type(input, 'Second task');
       await user.click(screen.getByRole('button', { name: 'Add Todo' }));
 
-      expect(screen.getByText('2 uncompleted todos')).toBeInTheDocument();
+      expect(screen.getByText('2 incomplete todos')).toBeInTheDocument();
     });
 
     test('displays count of completed todos in archive view', async () => {
@@ -1074,13 +1074,13 @@ describe('App Component', () => {
       await user.type(input, 'Second task');
       await user.click(screen.getByRole('button', { name: 'Add Todo' }));
 
-      expect(screen.getByText('2 uncompleted todos')).toBeInTheDocument();
+      expect(screen.getByText('2 incomplete todos')).toBeInTheDocument();
 
       // Delete one todo
       const deleteButtons = screen.getAllByRole('button', { name: 'Delete' });
       await user.click(deleteButtons[0]);
 
-      expect(screen.getByText('1 uncompleted todos')).toBeInTheDocument();
+      expect(screen.getByText('1 incomplete todo')).toBeInTheDocument();
     });
 
     test('updates count when todos are completed', async () => {
@@ -1095,13 +1095,13 @@ describe('App Component', () => {
       await user.type(input, 'Task 2');
       await user.click(screen.getByRole('button', { name: 'Add Todo' }));
 
-      expect(screen.getByText('2 uncompleted todos')).toBeInTheDocument();
+      expect(screen.getByText('2 incomplete todos')).toBeInTheDocument();
 
       // Complete one
       const completeButtons = screen.getAllByRole('button', { name: 'Complete' });
       await user.click(completeButtons[0]);
 
-      expect(screen.getByText('1 uncompleted todos')).toBeInTheDocument();
+      expect(screen.getByText('1 incomplete todo')).toBeInTheDocument();
     });
 
     test('shows filtered count when search is applied', async () => {
@@ -1118,14 +1118,14 @@ describe('App Component', () => {
       await user.type(input, 'Read a book');
       await user.click(screen.getByRole('button', { name: 'Add Todo' }));
 
-      expect(screen.getByText('3 uncompleted todos')).toBeInTheDocument();
+      expect(screen.getByText('3 incomplete todos')).toBeInTheDocument();
 
       // Apply search filter
       const searchInput = screen.getByPlaceholderText('Search todos...');
       await user.type(searchInput, 'dog');
 
       // Count should reflect only filtered results
-      expect(screen.getByText('1 uncompleted todos')).toBeInTheDocument();
+      expect(screen.getByText('1 incomplete todo')).toBeInTheDocument();
     });
 
     test('shows filtered count when category filter is applied', async () => {
@@ -1144,14 +1144,14 @@ describe('App Component', () => {
       await user.type(input, 'Low priority task');
       await user.click(screen.getByRole('button', { name: 'Add Todo' }));
 
-      expect(screen.getByText('2 uncompleted todos')).toBeInTheDocument();
+      expect(screen.getByText('2 incomplete todos')).toBeInTheDocument();
 
       // Apply category filter
       const priorityFilter = document.getElementById('filter-priority');
       await user.selectOptions(priorityFilter, 'high');
 
       // Count should reflect filtered results
-      expect(screen.getByText('1 uncompleted todos')).toBeInTheDocument();
+      expect(screen.getByText('1 incomplete todo')).toBeInTheDocument();
     });
 
     test('shows correct count in archive after filtering', async () => {
@@ -1182,7 +1182,7 @@ describe('App Component', () => {
       const searchInput = screen.getByPlaceholderText('Search todos...');
       await user.type(searchInput, 'Special');
 
-      expect(screen.getByText('1 completed todos')).toBeInTheDocument();
+      expect(screen.getByText('1 completed todo')).toBeInTheDocument();
     });
   });
 });

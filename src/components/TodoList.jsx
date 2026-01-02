@@ -2,7 +2,7 @@ import TodoItem from './TodoItem'
 
 function TodoList({ todos, editingId, editValue, editCategories, isArchived, onEdit, onSave, onCancel, onEditValueChange, onEditCategoryChange, onComplete, onDelete, onRestore }) {
   const count = todos.length
-  const countText = isArchived ? `${count} completed todos` : `${count} uncompleted todos`
+  const countText = isArchived ? `${count} completed ${count === 1 ? 'todo' : 'todos'}` : `${count} incomplete ${count === 1 ? 'todo' : 'todos'}`
 
   return (
     <>
