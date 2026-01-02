@@ -228,6 +228,18 @@ h1 {
   transform: translateY(1px);
 }
 
+.todo-count {
+  text-align: center;
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--text-primary);
+  margin-bottom: 1rem;
+  padding: 0.5rem;
+  background-color: var(--form-bg);
+  border-radius: 6px;
+  opacity: 0.85;
+}
+
 .todo-list {
   list-style: none;
   padding: 0;
