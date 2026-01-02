@@ -45,59 +45,61 @@ function TodoItem({ todo, isEditing, editValue, editCategories, isArchived, onEd
   return (
     <li className={`todo-item${isArchived ? ' archived' : ''}`}>
       <span className={`todo-text${isArchived ? ' completed' : ''}`}>{todo.text}</span>
-      <div className="category-badges">
-        {todo.categories && Object.entries(todo.categories).map(([type, value]) => {
-          const typeConfig = categoryTypes[type]
-          if (!typeConfig) return null
-          const label = typeConfig.options[value] || value
-          return (
-            <span 
-              key={`${todo.id}-${type}`} 
-              className={`category-badge category-${type}-${value}`}
-            >
-              {label}
-            </span>
-          )
-        })}
-      </div>
-      <div className="button-group">
-        {!isArchived ? (
-          <>
-            <button
-              onClick={() => onEdit(todo.id, todo.text, todo.categories)}
-              className="edit-button"
-            >
-              Edit
-            </button>
-            <button
-              onClick={() => onComplete(todo.id)}
-              className="complete-button"
-            >
-              Complete
-            </button>
-            <button
-              onClick={() => onDelete(todo.id)}
-              className="delete-button"
-            >
-              Delete
-            </button>
-          </>
-        ) : (
-          <>
-            <button
-              onClick={() => onRestore(todo.id)}
-              className="restore-button"
-            >
-              Restore
-            </button>
-            <button
-              onClick={() => onDelete(todo.id)}
-              className="delete-button"
-            >
-              Delete
-            </button>
-          </>
-        )}
+      <div className="todo-item-footer">
+        <div className="category-badges">
+          {todo.categories && Object.entries(todo.categories).map(([type, value]) => {
+            const typeConfig = categoryTypes[type]
+            if (!typeConfig) return null
+            const label = typeConfig.options[value] || value
+            return (
+              <span 
+                key={`${todo.id}-${type}`} 
+                className={`category-badge category-${type}-${value}`}
+              >
+                {label}
+              </span>
+            )
+          })}
+        </div>
+        <div className="button-group">
+          {!isArchived ? (
+            <>
+              <button
+                onClick={() => onEdit(todo.id, todo.text, todo.categories)}
+                className="edit-button"
+              >
+                Edit
+              </button>
+              <button
+                onClick={() => onComplete(todo.id)}
+                className="complete-button"
+              >
+                Complete
+              </button>
+              <button
+                onClick={() => onDelete(todo.id)}
+                className="delete-button"
+              >
+                Delete
+              </button>
+            </>
+          ) : (
+            <>
+              <button
+                onClick={() => onRestore(todo.id)}
+                className="restore-button"
+              >
+                Restore
+              </button>
+              <button
+                onClick={() => onDelete(todo.id)}
+                className="delete-button"
+              >
+                Delete
+              </button>
+            </>
+          )}
+        </div>
       </div>
     </li>
   )

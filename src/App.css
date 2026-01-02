@@ -265,16 +265,14 @@ h1 {
 
 .todo-item {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 1rem;
+  flex-direction: column;
+  gap: 0.75rem;
   padding: 1rem 1.25rem;
   margin-bottom: 0.75rem;
   background-color: var(--bg-secondary);
   border: 1px solid var(--border-color);
   border-radius: 6px;
   transition: all 0.3s;
-  flex-wrap: wrap;
 }
 
 .todo-item:hover {
@@ -283,11 +281,10 @@ h1 {
 }
 
 .todo-text {
-  flex: 1;
-  min-width: 200px;
   color: var(--text-primary);
   font-size: 1rem;
   line-height: 1.5;
+  width: 100%;
 }
 
 .todo-text.completed {
@@ -297,6 +294,14 @@ h1 {
 
 .todo-item.archived {
   opacity: 0.8;
+}
+
+.todo-item-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
 }
 
 .category-badges {
