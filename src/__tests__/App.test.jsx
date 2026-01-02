@@ -764,7 +764,7 @@ describe('App Component', () => {
 
     test('handles todos with corrupted category data gracefully', async () => {
       const user = userEvent.setup();
-      const { container } = render(<App />);
+      render(<App />);
 
       // Add a normal todo first
       const input = screen.getByPlaceholderText('Enter a new todo...');
@@ -1017,6 +1017,172 @@ describe('App Component', () => {
       await user.clear(searchInput);
       expect(screen.getByText('First task')).toBeInTheDocument();
       expect(screen.getByText('Second task')).toBeInTheDocument();
+    });
+  });
+
+  describe('Todo Count Display', () => {
+    test('displays count of uncompleted todos in active view', async () => {
+      const user = userEvent.setup();
+      render(<App />);
+
+      // Initially should show 0 uncompleted todos
+      expect(screen.getByText('0 uncompleted todos')).toBeInTheDocument();
+
+      // Add a todo
+      const input = screen.getByPlaceholderText('Enter a new todo...');
+      await user.type(input, 'First task');
+      await user.click(screen.getByRole('button', { name: 'Add Todo' }));
+
+      expect(screen.getByText('1 uncompleted todos')).toBeInTheDocument();
+
+      // Add another todo
+      await user.type(input, 'Second task');
+      await user.click(screen.getByRole('button', { name: 'Add Todo' }));
+
+      expect(screen.getByText('2 uncompleted todos')).toBeInTheDocument();
+    });
+
+    test('displays count of completed todos in archive view', async () => {
+      const user = userEvent.setup();
+      render(<App />);
+
+      // Add and complete todos
+      const input = screen.getByPlaceholderText('Enter a new todo...');
+      await user.type(input, 'First task');
+      await user.click(screen.getByRole('button', { name: 'Add Todo' }));
+      await user.click(screen.getByRole('button', { name: 'Complete' }));
+
+      await user.type(input, 'Second task');
+      await user.click(screen.getByRole('button', { name: 'Add Todo' }));
+      await user.click(screen.getByRole('button', { name: 'Complete' }));
+
+      // Switch to archive view
+      await user.click(screen.getByRole('button', { name: /Archive/i }));
+
+      expect(screen.getByText('2 completed todos')).toBeInTheDocument();
+    });
+
+    test('updates count when todos are deleted', async () => {
+      const user = userEvent.setup();
+      render(<App />);
+
+      const input = screen.getByPlaceholderText('Enter a new todo...');
+      
+      // Add multiple todos
+      await user.type(input, 'First task');
+      await user.click(screen.getByRole('button', { name: 'Add Todo' }));
+      await user.type(input, 'Second task');
+      await user.click(screen.getByRole('button', { name: 'Add Todo' }));
+
+      expect(screen.getByText('2 uncompleted todos')).toBeInTheDocument();
+
+      // Delete one todo
+      const deleteButtons = screen.getAllByRole('button', { name: 'Delete' });
+      await user.click(deleteButtons[0]);
+
+      expect(screen.getByText('1 uncompleted todos')).toBeInTheDocument();
+    });
+
+    test('updates count when todos are completed', async () => {
+      const user = userEvent.setup();
+      render(<App />);
+
+      const input = screen.getByPlaceholderText('Enter a new todo...');
+      
+      // Add todos
+      await user.type(input, 'Task 1');
+      await user.click(screen.getByRole('button', { name: 'Add Todo' }));
+      await user.type(input, 'Task 2');
+      await user.click(screen.getByRole('button', { name: 'Add Todo' }));
+
+      expect(screen.getByText('2 uncompleted todos')).toBeInTheDocument();
+
+      // Complete one
+      const completeButtons = screen.getAllByRole('button', { name: 'Complete' });
+      await user.click(completeButtons[0]);
+
+      expect(screen.getByText('1 uncompleted todos')).toBeInTheDocument();
+    });
+
+    test('shows filtered count when search is applied', async () => {
+      const user = userEvent.setup();
+      render(<App />);
+
+      const input = screen.getByPlaceholderText('Enter a new todo...');
+      
+      // Add multiple todos
+      await user.type(input, 'Buy groceries');
+      await user.click(screen.getByRole('button', { name: 'Add Todo' }));
+      await user.type(input, 'Walk the dog');
+      await user.click(screen.getByRole('button', { name: 'Add Todo' }));
+      await user.type(input, 'Read a book');
+      await user.click(screen.getByRole('button', { name: 'Add Todo' }));
+
+      expect(screen.getByText('3 uncompleted todos')).toBeInTheDocument();
+
+      // Apply search filter
+      const searchInput = screen.getByPlaceholderText('Search todos...');
+      await user.type(searchInput, 'dog');
+
+      // Count should reflect only filtered results
+      expect(screen.getByText('1 uncompleted todos')).toBeInTheDocument();
+    });
+
+    test('shows filtered count when category filter is applied', async () => {
+      const user = userEvent.setup();
+      render(<App />);
+
+      const input = screen.getByPlaceholderText('Enter a new todo...');
+      const prioritySelect = document.getElementById('priority-select');
+
+      // Add todos with different priorities
+      await user.selectOptions(prioritySelect, 'high');
+      await user.type(input, 'High priority task');
+      await user.click(screen.getByRole('button', { name: 'Add Todo' }));
+
+      await user.selectOptions(prioritySelect, 'low');
+      await user.type(input, 'Low priority task');
+      await user.click(screen.getByRole('button', { name: 'Add Todo' }));
+
+      expect(screen.getByText('2 uncompleted todos')).toBeInTheDocument();
+
+      // Apply category filter
+      const priorityFilter = document.getElementById('filter-priority');
+      await user.selectOptions(priorityFilter, 'high');
+
+      // Count should reflect filtered results
+      expect(screen.getByText('1 uncompleted todos')).toBeInTheDocument();
+    });
+
+    test('shows correct count in archive after filtering', async () => {
+      const user = userEvent.setup();
+      render(<App />);
+
+      const input = screen.getByPlaceholderText('Enter a new todo...');
+      
+      // Add and complete multiple todos
+      await user.type(input, 'Task 1');
+      await user.click(screen.getByRole('button', { name: 'Add Todo' }));
+      await user.click(screen.getByRole('button', { name: 'Complete' }));
+
+      await user.type(input, 'Task 2');
+      await user.click(screen.getByRole('button', { name: 'Add Todo' }));
+      await user.click(screen.getByRole('button', { name: 'Complete' }));
+
+      await user.type(input, 'Special task');
+      await user.click(screen.getByRole('button', { name: 'Add Todo' }));
+      await user.click(screen.getByRole('button', { name: 'Complete' }));
+
+      // Switch to archive
+      await user.click(screen.getByRole('button', { name: /Archive/i }));
+
+      expect(screen.getByText('3 completed todos')).toBeInTheDocument();
+
+      // Apply search filter in archive
+      const searchInput = screen.getByPlaceholderText('Search todos...');
+      await user.type(searchInput, 'Special');
+
+      expect(screen.getByText('1 completed todos')).toBeInTheDocument();
     });
   });
 });
