@@ -161,78 +161,82 @@ function App() {
 
   return (
     <div className={`app ${theme}`}>
-      <Header 
-        theme={theme} 
-        onThemeToggle={() => setTheme(theme === 'light' ? 'dark' : 'light')}
-      />
-      <ViewToggle 
-        showArchive={showArchive}
-        onToggle={setShowArchive}
-        todosCount={todos.length}
-        archiveCount={archive.length}
-      />
-      <SearchFilter 
-        searchText={searchText}
-        onSearchChange={setSearchText}
-        filterCategories={filterCategories}
-        onFilterChange={handleFilterCategoryChange}
-      />
-      {!showArchive ? (
-        <>
-          <TodoForm 
-            inputValue={inputValue}
-            onInputChange={setInputValue}
-            selectedCategories={selectedCategories}
-            onCategoryChange={handleCategoryChange}
-            onSubmit={handleSubmit}
-          />
-          <TodoList 
-            todos={filteredTodos}
-            editingId={editingId}
-            editValue={editValue}
-            editCategories={editCategories}
-            isArchived={false}
-            onEdit={handleEdit}
-            onSave={handleSave}
-            onCancel={handleCancelEdit}
-            onEditValueChange={setEditValue}
-            onEditCategoryChange={handleEditCategoryChange}
-            onComplete={handleComplete}
-            onDelete={handleDelete}
-            onRestore={handleRestore}
-          />
-          {filteredTodos.length === 0 && todos.length > 0 && (
-            <p className="empty-message">No todos match your search or filters.</p>
-          )}
-          {todos.length === 0 && (
-            <p className="empty-message">No todos yet. Add one to get started!</p>
-          )}
-        </>
-      ) : (
-        <>
-          <TodoList 
-            todos={filteredArchive}
-            editingId={null}
-            editValue=""
-            editCategories={{}}
-            isArchived={true}
-            onEdit={() => {}}
-            onSave={() => {}}
-            onCancel={() => {}}
-            onEditValueChange={() => {}}
-            onEditCategoryChange={() => {}}
-            onComplete={() => {}}
-            onDelete={handleDeleteFromArchive}
-            onRestore={handleRestore}
-          />
-          {filteredArchive.length === 0 && archive.length > 0 && (
-            <p className="empty-message">No archived todos match your search or filters.</p>
-          )}
-          {archive.length === 0 && (
-            <p className="empty-message">No archived todos yet.</p>
-          )}
-        </>
-      )}
+      <aside className="sidebar">
+        <SearchFilter 
+          searchText={searchText}
+          onSearchChange={setSearchText}
+          filterCategories={filterCategories}
+          onFilterChange={handleFilterCategoryChange}
+        />
+      </aside>
+      <main className="main-content">
+        <Header 
+          theme={theme} 
+          onThemeToggle={() => setTheme(theme === 'light' ? 'dark' : 'light')}
+        />
+        <ViewToggle 
+          showArchive={showArchive}
+          onToggle={setShowArchive}
+          todosCount={todos.length}
+          archiveCount={archive.length}
+        />
+        {!showArchive ? (
+          <>
+            <TodoForm 
+              inputValue={inputValue}
+              onInputChange={setInputValue}
+              selectedCategories={selectedCategories}
+              onCategoryChange={handleCategoryChange}
+              onSubmit={handleSubmit}
+            />
+            <TodoList 
+              todos={filteredTodos}
+              editingId={editingId}
+              editValue={editValue}
+              editCategories={editCategories}
+              isArchived={false}
+              onEdit={handleEdit}
+              onSave={handleSave}
+              onCancel={handleCancelEdit}
+              onEditValueChange={setEditValue}
+              onEditCategoryChange={handleEditCategoryChange}
+              onComplete={handleComplete}
+              onDelete={handleDelete}
+              onRestore={handleRestore}
+            />
+            {filteredTodos.length === 0 && todos.length > 0 && (
+              <p className="empty-message">No todos match your search or filters.</p>
+            )}
+            {todos.length === 0 && (
+              <p className="empty-message">No todos yet. Add one to get started!</p>
+            )}
+          </>
+        ) : (
+          <>
+            <TodoList 
+              todos={filteredArchive}
+              editingId={null}
+              editValue=""
+              editCategories={{}}
+              isArchived={true}
+              onEdit={() => {}}
+              onSave={() => {}}
+              onCancel={() => {}}
+              onEditValueChange={() => {}}
+              onEditCategoryChange={() => {}}
+              onComplete={() => {}}
+              onDelete={handleDeleteFromArchive}
+              onRestore={handleRestore}
+            />
+            {filteredArchive.length === 0 && archive.length > 0 && (
+              <p className="empty-message">No archived todos match your search or filters.</p>
+            )}
+            {archive.length === 0 && (
+              <p className="empty-message">No archived todos yet.</p>
+            )}
+          </>
+        )}
+      </main>
     </div>
   )
 }
