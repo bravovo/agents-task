@@ -106,7 +106,8 @@ cypress/
 │   ├── TodoItem.cy.jsx
 │   └── TodoList.cy.jsx
 └── support/
-    └── component.js  # Component test setup
+    ├── component.js            # Component test setup
+    └── component-index.html    # HTML template for component tests
 ```
 
 ## Writing New Component Tests

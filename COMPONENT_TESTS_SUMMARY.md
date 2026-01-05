@@ -10,6 +10,7 @@ This implementation adds comprehensive Cypress component tests for the Todo App 
 
 - **cypress.config.js** - Updated with component testing configuration
 - **cypress/support/component.js** - Support file for component tests (imports styles, coverage plugin, and mount command)
+- **cypress/support/component-index.html** - HTML template for mounting components during tests
 - **.nycrc.component.json** - NYC configuration for component test coverage reporting
 - **.gitignore** - Updated to exclude coverage-component directory
 
