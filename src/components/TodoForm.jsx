@@ -4,7 +4,7 @@ import CategorySelect from './CategorySelect'
 function TodoForm({ inputValue, onInputChange, selectedCategories, onCategoryChange, onSubmit }) {
   const handleSubmit = (e) => {
     e.preventDefault();
-    onSubmit();
+    onSubmit(e);
   }
   
   return (
