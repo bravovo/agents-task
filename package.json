@@ -13,6 +13,10 @@
     "test:watch": "jest --watch",
     "cypress:open": "cypress open",
     "cypress:run": "cypress run",
+    "cypress:component": "cypress run --component",
+    "cypress:component:open": "cypress open --component",
+    "test:component": "cypress run --component",
+    "test:component:coverage": "cypress run --component && npx nyc report --nycrc-path .nycrc.component.json --reporter=text --reporter=text-summary --reporter=html",
     "test:e2e": "npm run build && start-server-and-test preview http://localhost:5173 'cypress run'"
   },
   "dependencies": {

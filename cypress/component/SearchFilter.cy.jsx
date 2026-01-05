@@ -1,0 +1,175 @@
+import SearchFilter from '../../src/components/SearchFilter'
+import { categoryTypes } from '../../src/constants'
+
+describe('SearchFilter Component', () => {
+  const defaultFilterCategories = {
+    priority: 'all',
+    time: 'all',
+    progress: 'all'
+  }
+
+  it('renders search input with correct placeholder', () => {
+    cy.mount(
+      <SearchFilter
+        searchText=""
+        onSearchChange={() => {}}
+        filterCategories={defaultFilterCategories}
+        onFilterChange={() => {}}
+      />
+    )
+    cy.get('.search-input').should('have.attr', 'placeholder', 'Search todos...')
+  })
+
+  it('displays search text value', () => {
+    cy.mount(
+      <SearchFilter
+        searchText="test search"
+        onSearchChange={() => {}}
+        filterCategories={defaultFilterCategories}
+        onFilterChange={() => {}}
+      />
+    )
+    cy.get('.search-input').should('have.value', 'test search')
+  })
+
+  it('calls onSearchChange when typing in search input', () => {
+    const onSearchChangeSpy = cy.spy().as('onSearchChangeSpy')
+    cy.mount(
+      <SearchFilter
+        searchText=""
+        onSearchChange={onSearchChangeSpy}
+        filterCategories={defaultFilterCategories}
+        onFilterChange={() => {}}
+      />
+    )
+    cy.get('.search-input').type('new search')
+    cy.get('@onSearchChangeSpy').should('have.been.called')
+  })
+
+  it('renders all three filter groups (priority, time, progress)', () => {
+    cy.mount(
+      <SearchFilter
+        searchText=""
+        onSearchChange={() => {}}
+        filterCategories={defaultFilterCategories}
+        onFilterChange={() => {}}
+      />
+    )
+    cy.contains('Priority:').should('be.visible')
+    cy.contains('Time:').should('be.visible')
+    cy.contains('Progress:').should('be.visible')
+  })
+
+  it('shows "All" option for each filter category', () => {
+    cy.mount(
+      <SearchFilter
+        searchText=""
+        onSearchChange={() => {}}
+        filterCategories={defaultFilterCategories}
+        onFilterChange={() => {}}
+      />
+    )
+    cy.get('#filter-priority option[value="all"]').should('contain', 'All')
+    cy.get('#filter-time option[value="all"]').should('contain', 'All')
+    cy.get('#filter-progress option[value="all"]').should('contain', 'All')
+  })
+
+  it('displays correct selected filter values', () => {
+    cy.mount(
+      <SearchFilter
+        searchText=""
+        onSearchChange={() => {}}
+        filterCategories={{
+          priority: 'high',
+          time: 'today',
+          progress: 'in-progress'
+        }}
+        onFilterChange={() => {}}
+      />
+    )
+    cy.get('#filter-priority').should('have.value', 'high')
+    cy.get('#filter-time').should('have.value', 'today')
+    cy.get('#filter-progress').should('have.value', 'in-progress')
+  })
+
+  it('calls onFilterChange with correct type and value for priority', () => {
+    const onFilterChangeSpy = cy.spy().as('onFilterChangeSpy')
+    cy.mount(
+      <SearchFilter
+        searchText=""
+        onSearchChange={() => {}}
+        filterCategories={defaultFilterCategories}
+        onFilterChange={onFilterChangeSpy}
+      />
+    )
+    cy.get('#filter-priority').select('high')
+    cy.get('@onFilterChangeSpy').should('have.been.calledWith', 'priority', 'high')
+  })
+
+  it('calls onFilterChange with correct type and value for time', () => {
+    const onFilterChangeSpy = cy.spy().as('onFilterChangeSpy')
+    cy.mount(
+      <SearchFilter
+        searchText=""
+        onSearchChange={() => {}}
+        filterCategories={defaultFilterCategories}
+        onFilterChange={onFilterChangeSpy}
+      />
+    )
+    cy.get('#filter-time').select('this-week')
+    cy.get('@onFilterChangeSpy').should('have.been.calledWith', 'time', 'this-week')
+  })
+
+  it('calls onFilterChange with correct type and value for progress', () => {
+    const onFilterChangeSpy = cy.spy().as('onFilterChangeSpy')
+    cy.mount(
+      <SearchFilter
+        searchText=""
+        onSearchChange={() => {}}
+        filterCategories={defaultFilterCategories}
+        onFilterChange={onFilterChangeSpy}
+      />
+    )
+    cy.get('#filter-progress').select('blocked')
+    cy.get('@onFilterChangeSpy').should('have.been.calledWith', 'progress', 'blocked')
+  })
+
+  it('renders all priority filter options', () => {
+    cy.mount(
+      <SearchFilter
+        searchText=""
+        onSearchChange={() => {}}
+        filterCategories={defaultFilterCategories}
+        onFilterChange={() => {}}
+      />
+    )
+    const priorityOptions = Object.keys(categoryTypes.priority.options).length + 1 // +1 for "All"
+    cy.get('#filter-priority option').should('have.length', priorityOptions)
+  })
+
+  it('renders all time filter options', () => {
+    cy.mount(
+      <SearchFilter
+        searchText=""
+        onSearchChange={() => {}}
+        filterCategories={defaultFilterCategories}
+        onFilterChange={() => {}}
+      />
+    )
+    const timeOptions = Object.keys(categoryTypes.time.options).length + 1 // +1 for "All"
+    cy.get('#filter-time option').should('have.length', timeOptions)
+  })
+
+  it('renders all progress filter options', () => {
+    cy.mount(
+      <SearchFilter
+        searchText=""
+        onSearchChange={() => {}}
+        filterCategories={defaultFilterCategories}
+        onFilterChange={() => {}}
+      />
+    )
+    const progressOptions = Object.keys(categoryTypes.progress.options).length + 1 // +1 for "All"
+    cy.get('#filter-progress option').should('have.length', progressOptions)
+  })
+})

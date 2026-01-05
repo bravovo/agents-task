@@ -13,6 +13,7 @@ dist-ssr
 *.local
 coverage
 coverage-e2e
+coverage-component
 .nyc_output
 
 # Editor directories and files

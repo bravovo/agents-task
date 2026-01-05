@@ -12,6 +12,19 @@ export default defineConfig({
       return config
     },
   },
+  component: {
+    devServer: {
+      framework: 'react',
+      bundler: 'vite',
+    },
+    specPattern: 'cypress/component/**/*.cy.{js,jsx,ts,tsx}',
+    supportFile: 'cypress/support/component.js',
+    setupNodeEvents(on, config) {
+      // Code coverage setup for component tests
+      require('@cypress/code-coverage/task')(on, config)
+      return config
+    },
+  },
   video: false,
   screenshotOnRunFailure: true,
   viewportWidth: 1280,

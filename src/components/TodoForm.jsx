@@ -2,8 +2,13 @@ import { categoryTypes } from '../constants'
 import CategorySelect from './CategorySelect'
 
 function TodoForm({ inputValue, onInputChange, selectedCategories, onCategoryChange, onSubmit }) {
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    onSubmit();
+  }
+  
   return (
-    <form onSubmit={onSubmit} className="todo-form">
+    <form onSubmit={handleSubmit} className="todo-form">
       <input
         type="text"
         value={inputValue}
