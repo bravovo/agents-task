@@ -23,8 +23,8 @@ describe('ViewToggle Component', () => {
         archiveCount={3} 
       />
     )
-    cy.contains('Active Todos (5)').parent().should('have.class', 'active')
-    cy.contains('Archive (3)').parent().should('not.have.class', 'active')
+    cy.contains('button', 'Active Todos (5)').should('have.class', 'active')
+    cy.contains('button', 'Archive (3)').should('not.have.class', 'active')
   })
 
   it('shows archive button as active when showArchive is true', () => {
@@ -36,8 +36,8 @@ describe('ViewToggle Component', () => {
         archiveCount={3} 
       />
     )
-    cy.contains('Active Todos (5)').parent().should('not.have.class', 'active')
-    cy.contains('Archive (3)').parent().should('have.class', 'active')
+    cy.contains('button', 'Active Todos (5)').should('not.have.class', 'active')
+    cy.contains('button', 'Archive (3)').should('have.class', 'active')
   })
 
   it('calls onToggle with false when active button is clicked', () => {

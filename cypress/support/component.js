@@ -2,7 +2,7 @@
 import '@cypress/code-coverage/support'
 
 // Import React and mount command
-import { mount } from 'cypress/react18'
+import { mount } from 'cypress/react'
 import '../../src/index.css'
 import '../../src/App.css'
 
