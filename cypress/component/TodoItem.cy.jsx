@@ -446,6 +446,6 @@ describe('TodoItem Component - Edit Mode', () => {
         onRestore={() => {}}
       />
     )
-    cy.get('.edit-input').should('have.attr', 'autofocus')
+    cy.get('.edit-input').should('be.focused')
   })
 })
