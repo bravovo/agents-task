@@ -13,7 +13,7 @@ echo "✓ Total test files: $test_files"
 # Count total tests
 total_tests=0
 for file in cypress/component/*.cy.jsx; do
-    count=$(grep -c "^\s*it(" "$file")
+    count=$(grep -c '^\s*it(' "$file")
     filename=$(basename "$file")
     echo "  - $filename: $count tests"
     total_tests=$((total_tests + count))

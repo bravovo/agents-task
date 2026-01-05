@@ -13,12 +13,12 @@ The following components have complete test coverage:
 1. **Header** (5 tests) - Theme toggle functionality and display
 2. **ViewToggle** (7 tests) - Toggle between active and archived views
 3. **CategorySelect** (8 tests) - Dropdown component for category selection
-4. **SearchFilter** (11 tests) - Search and filter functionality
+4. **SearchFilter** (12 tests) - Search and filter functionality
 5. **TodoForm** (12 tests) - Form for adding new todos
-6. **TodoItem** (26 tests) - Individual todo item in view, edit, and archived modes
+6. **TodoItem** (18 tests) - Individual todo item in view, edit, and archived modes
 7. **TodoList** (10 tests) - List of todos with proper state management
 
-**Total: 79 component tests**
+**Total: 72 component tests**
 
 ## Running Component Tests
 
