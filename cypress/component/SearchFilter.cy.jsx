@@ -284,6 +284,7 @@ describe('SearchFilter Component - Edge Cases', () => {
     )
     // Change priority
     cy.get('#filter-priority').select('high')
+    cy.get('@onFilterChangeSpy').should('have.been.calledWith', 'priority', 'high')
     cy.get('#filter-priority').should('have.value', 'high')
     // Other filters should remain "all"
     cy.get('#filter-time').should('have.value', 'all')

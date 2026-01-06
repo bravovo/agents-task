@@ -239,6 +239,7 @@ describe('ViewToggle Component - Edge Cases', () => {
       />
     )
     cy.contains('Archive (3)').focus().type('{enter}')
+    cy.get('@onToggleSpy').should('have.been.calledOnce')
     cy.get('@onToggleSpy').should('have.been.calledWith', true)
   })
 })

@@ -141,7 +141,7 @@ describe('CategorySelect Component - Edge Cases', () => {
     )
     cy.get('#priority-select').select('high')
     cy.get('#priority-select').select('low')
-    cy.get('#priority-select').select('medium')
+    cy.get('#priority-select').select('high')
     cy.get('@onChangeSpy').should('have.callCount', 3)
   })
 

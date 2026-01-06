@@ -59,14 +59,14 @@ describe('Header Component - Edge Cases', () => {
     const onThemeToggleSpy = cy.spy().as('onThemeToggleSpy')
     cy.mount(<Header theme="light" onThemeToggle={onThemeToggleSpy} />)
     cy.get('.theme-toggle').focus().type('{enter}')
-    cy.get('@onThemeToggleSpy').should('have.been.called')
+    cy.get('@onThemeToggleSpy').should('have.been.calledOnce')
   })
 
   it('theme toggle works with keyboard (Space)', () => {
     const onThemeToggleSpy = cy.spy().as('onThemeToggleSpy')
     cy.mount(<Header theme="light" onThemeToggle={onThemeToggleSpy} />)
     cy.get('.theme-toggle').focus().type(' ')
-    cy.get('@onThemeToggleSpy').should('have.been.called')
+    cy.get('@onThemeToggleSpy').should('have.been.calledOnce')
   })
 
   it('displays correct icon for undefined theme (defaults gracefully)', () => {
