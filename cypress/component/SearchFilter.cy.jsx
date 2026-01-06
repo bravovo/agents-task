@@ -12,9 +12,9 @@ describe('SearchFilter Component', () => {
     cy.mount(
       <SearchFilter
         searchText=""
-        onSearchChange={() => {}}
+        onSearchChange={() => { }}
         filterCategories={defaultFilterCategories}
-        onFilterChange={() => {}}
+        onFilterChange={() => { }}
       />
     )
     cy.get('.search-input').should('have.attr', 'placeholder', 'Search todos...')
@@ -24,9 +24,9 @@ describe('SearchFilter Component', () => {
     cy.mount(
       <SearchFilter
         searchText="test search"
-        onSearchChange={() => {}}
+        onSearchChange={() => { }}
         filterCategories={defaultFilterCategories}
-        onFilterChange={() => {}}
+        onFilterChange={() => { }}
       />
     )
     cy.get('.search-input').should('have.value', 'test search')
@@ -39,7 +39,7 @@ describe('SearchFilter Component', () => {
         searchText=""
         onSearchChange={onSearchChangeSpy}
         filterCategories={defaultFilterCategories}
-        onFilterChange={() => {}}
+        onFilterChange={() => { }}
       />
     )
     cy.get('.search-input').type('new search')
@@ -50,9 +50,9 @@ describe('SearchFilter Component', () => {
     cy.mount(
       <SearchFilter
         searchText=""
-        onSearchChange={() => {}}
+        onSearchChange={() => { }}
         filterCategories={defaultFilterCategories}
-        onFilterChange={() => {}}
+        onFilterChange={() => { }}
       />
     )
     cy.contains('Priority:').should('be.visible')
@@ -64,9 +64,9 @@ describe('SearchFilter Component', () => {
     cy.mount(
       <SearchFilter
         searchText=""
-        onSearchChange={() => {}}
+        onSearchChange={() => { }}
         filterCategories={defaultFilterCategories}
-        onFilterChange={() => {}}
+        onFilterChange={() => { }}
       />
     )
     cy.get('#filter-priority option[value="all"]').should('contain', 'All')
@@ -78,13 +78,13 @@ describe('SearchFilter Component', () => {
     cy.mount(
       <SearchFilter
         searchText=""
-        onSearchChange={() => {}}
+        onSearchChange={() => { }}
         filterCategories={{
           priority: 'high',
           time: 'today',
           progress: 'in-progress'
         }}
-        onFilterChange={() => {}}
+        onFilterChange={() => { }}
       />
     )
     cy.get('#filter-priority').should('have.value', 'high')
@@ -97,7 +97,7 @@ describe('SearchFilter Component', () => {
     cy.mount(
       <SearchFilter
         searchText=""
-        onSearchChange={() => {}}
+        onSearchChange={() => { }}
         filterCategories={defaultFilterCategories}
         onFilterChange={onFilterChangeSpy}
       />
@@ -111,7 +111,7 @@ describe('SearchFilter Component', () => {
     cy.mount(
       <SearchFilter
         searchText=""
-        onSearchChange={() => {}}
+        onSearchChange={() => { }}
         filterCategories={defaultFilterCategories}
         onFilterChange={onFilterChangeSpy}
       />
@@ -125,7 +125,7 @@ describe('SearchFilter Component', () => {
     cy.mount(
       <SearchFilter
         searchText=""
-        onSearchChange={() => {}}
+        onSearchChange={() => { }}
         filterCategories={defaultFilterCategories}
         onFilterChange={onFilterChangeSpy}
       />
@@ -138,9 +138,9 @@ describe('SearchFilter Component', () => {
     cy.mount(
       <SearchFilter
         searchText=""
-        onSearchChange={() => {}}
+        onSearchChange={() => { }}
         filterCategories={defaultFilterCategories}
-        onFilterChange={() => {}}
+        onFilterChange={() => { }}
       />
     )
     const priorityOptions = Object.keys(categoryTypes.priority.options).length + 1 // +1 for "All"
@@ -151,9 +151,9 @@ describe('SearchFilter Component', () => {
     cy.mount(
       <SearchFilter
         searchText=""
-        onSearchChange={() => {}}
+        onSearchChange={() => { }}
         filterCategories={defaultFilterCategories}
-        onFilterChange={() => {}}
+        onFilterChange={() => { }}
       />
     )
     const timeOptions = Object.keys(categoryTypes.time.options).length + 1 // +1 for "All"
@@ -164,9 +164,9 @@ describe('SearchFilter Component', () => {
     cy.mount(
       <SearchFilter
         searchText=""
-        onSearchChange={() => {}}
+        onSearchChange={() => { }}
         filterCategories={defaultFilterCategories}
-        onFilterChange={() => {}}
+        onFilterChange={() => { }}
       />
     )
     const progressOptions = Object.keys(categoryTypes.progress.options).length + 1 // +1 for "All"
@@ -188,7 +188,7 @@ describe('SearchFilter Component - Edge Cases', () => {
         searchText="existing search"
         onSearchChange={onSearchChangeSpy}
         filterCategories={defaultFilterCategories}
-        onFilterChange={() => {}}
+        onFilterChange={() => { }}
       />
     )
     cy.get('.search-input').clear()
@@ -202,7 +202,7 @@ describe('SearchFilter Component - Edge Cases', () => {
         searchText=""
         onSearchChange={onSearchChangeSpy}
         filterCategories={defaultFilterCategories}
-        onFilterChange={() => {}}
+        onFilterChange={() => { }}
       />
     )
     cy.get('.search-input').type('test@#$%')
@@ -216,7 +216,7 @@ describe('SearchFilter Component - Edge Cases', () => {
         searchText=""
         onSearchChange={onSearchChangeSpy}
         filterCategories={defaultFilterCategories}
-        onFilterChange={() => {}}
+        onFilterChange={() => { }}
       />
     )
     cy.get('.search-input').type('🚀 rocket')
@@ -228,7 +228,7 @@ describe('SearchFilter Component - Edge Cases', () => {
     cy.mount(
       <SearchFilter
         searchText=""
-        onSearchChange={() => {}}
+        onSearchChange={() => { }}
         filterCategories={{
           priority: 'high',
           time: 'today',
@@ -248,7 +248,7 @@ describe('SearchFilter Component - Edge Cases', () => {
     cy.mount(
       <SearchFilter
         searchText=""
-        onSearchChange={() => {}}
+        onSearchChange={() => { }}
         filterCategories={defaultFilterCategories}
         onFilterChange={onFilterChangeSpy}
       />
@@ -264,44 +264,49 @@ describe('SearchFilter Component - Edge Cases', () => {
     cy.mount(
       <SearchFilter
         searchText={longText}
-        onSearchChange={() => {}}
+        onSearchChange={() => { }}
         filterCategories={defaultFilterCategories}
-        onFilterChange={() => {}}
+        onFilterChange={() => { }}
       />
     )
     cy.get('.search-input').should('have.value', longText)
   })
 
-  it('maintains filter selections independently', () => {
-    const onFilterChangeSpy = cy.spy().as('onFilterChangeSpy')
-    cy.mount(
+  function Wrapper() {
+    const [filters, setFilters] = useState(defaultFilterCategories);
+
+    return (
       <SearchFilter
         searchText=""
-        onSearchChange={() => {}}
-        filterCategories={defaultFilterCategories}
-        onFilterChange={onFilterChangeSpy}
+        onSearchChange={() => { }}
+        filterCategories={filters}
+        onFilterChange={(type, value) =>
+          setFilters((prev) => ({ ...prev, [type]: value }))
+        }
       />
-    )
+    );
+  }
+
+  it("maintains filter selections independently", () => {
+    // const onFilterChangeSpy = cy.spy().as('onFilterChangeSpy')
+    cy.mount(<Wrapper />);
     // Change priority filter
-    cy.get('#filter-priority').select('high')
-    // Wait and verify the callback was invoked
-    cy.get('@onFilterChangeSpy').should('have.been.calledOnce')
-    cy.get('@onFilterChangeSpy').should('have.been.calledWith', 'priority', 'high')
-    
+    cy.get("#filter-priority").select("high");
+
     // Verify UI state
-    cy.get('#filter-priority').should('have.value', 'high')
+    cy.get("#filter-priority").should("have.value", "high");
     // Other filters should remain "all"
-    cy.get('#filter-time').should('have.value', 'all')
-    cy.get('#filter-progress').should('have.value', 'all')
-  })
+    cy.get("#filter-time").should("have.value", "all");
+    cy.get("#filter-progress").should("have.value", "all");
+  });
 
   it('renders correct structure with search section and filter controls', () => {
     cy.mount(
       <SearchFilter
         searchText=""
-        onSearchChange={() => {}}
+        onSearchChange={() => { }}
         filterCategories={defaultFilterCategories}
-        onFilterChange={() => {}}
+        onFilterChange={() => { }}
       />
     )
     cy.get('.search-filter-section').should('exist')
@@ -313,9 +318,9 @@ describe('SearchFilter Component - Edge Cases', () => {
     cy.mount(
       <SearchFilter
         searchText=""
-        onSearchChange={() => {}}
+        onSearchChange={() => { }}
         filterCategories={defaultFilterCategories}
-        onFilterChange={() => {}}
+        onFilterChange={() => { }}
       />
     )
     cy.get('label[for="filter-priority"]').should('exist')
@@ -335,9 +340,9 @@ describe('SearchFilter Component - Edge Cases', () => {
       cy.mount(
         <SearchFilter
           searchText=""
-          onSearchChange={() => {}}
+          onSearchChange={() => { }}
           filterCategories={combo}
-          onFilterChange={() => {}}
+          onFilterChange={() => { }}
         />
       )
       cy.get('#filter-priority').should('have.value', combo.priority)
