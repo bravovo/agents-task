@@ -282,9 +282,13 @@ describe('SearchFilter Component - Edge Cases', () => {
         onFilterChange={onFilterChangeSpy}
       />
     )
-    // Change priority
+    // Change priority filter
     cy.get('#filter-priority').select('high')
+    // Wait and verify the callback was invoked
+    cy.get('@onFilterChangeSpy').should('have.been.calledOnce')
     cy.get('@onFilterChangeSpy').should('have.been.calledWith', 'priority', 'high')
+    
+    // Verify UI state
     cy.get('#filter-priority').should('have.value', 'high')
     // Other filters should remain "all"
     cy.get('#filter-time').should('have.value', 'all')

@@ -128,20 +128,30 @@ describe('CategorySelect Component', () => {
 describe('CategorySelect Component - Edge Cases', () => {
   const priorityConfig = categoryTypes.priority
 
-  it('handles rapid selection changes', () => {
+  it('handles multiple selection changes', () => {
     const onChangeSpy = cy.spy().as('onChangeSpy')
     cy.mount(
       <CategorySelect
         id="priority-select"
         type="priority"
         config={priorityConfig}
-        value="medium"
+        value="low"
         onChange={onChangeSpy}
       />
     )
+    // Change from low to high
     cy.get('#priority-select').select('high')
+    cy.get('@onChangeSpy').should('have.been.calledWith', 'priority', 'high')
+    
+    // Change from high to medium
+    cy.get('#priority-select').select('medium')
+    cy.get('@onChangeSpy').should('have.been.calledWith', 'priority', 'medium')
+    
+    // Change from medium to low
     cy.get('#priority-select').select('low')
-    cy.get('#priority-select').select('high')
+    cy.get('@onChangeSpy').should('have.been.calledWith', 'priority', 'low')
+    
+    // Verify total call count
     cy.get('@onChangeSpy').should('have.callCount', 3)
   })
 
