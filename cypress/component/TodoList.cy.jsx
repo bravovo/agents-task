@@ -253,3 +253,169 @@ describe('TodoList Component', () => {
     cy.contains('Third todo').should('exist')
   })
 })
+
+describe('TodoList Component - Edge Cases', () => {
+  const defaultEditCategories = {
+    priority: 'medium',
+    time: 'today',
+    progress: 'not-started'
+  }
+
+  it('handles todos without categories', () => {
+    const todosWithoutCategories = [
+      { id: '1', text: 'Todo without categories', categories: null },
+      { id: '2', text: 'Another todo', categories: {} }
+    ]
+
+    cy.mount(
+      <TodoList
+        todos={todosWithoutCategories}
+        editingId={null}
+        editValue=""
+        editCategories={defaultEditCategories}
+        isArchived={false}
+        onEdit={() => {}}
+        onSave={() => {}}
+        onCancel={() => {}}
+        onEditValueChange={() => {}}
+        onEditCategoryChange={() => {}}
+        onComplete={() => {}}
+        onDelete={() => {}}
+        onRestore={() => {}}
+      />
+    )
+    cy.get('.todo-item').should('have.length', 2)
+    cy.contains('Todo without categories').should('be.visible')
+    cy.contains('Another todo').should('be.visible')
+  })
+
+  it('handles mix of archived and category states', () => {
+    const mixedTodos = [
+      { id: '1', text: 'Normal todo', categories: { priority: 'high' } },
+      { id: '2', text: 'No categories', categories: null },
+      { id: '3', text: 'Empty categories', categories: {} }
+    ]
+
+    cy.mount(
+      <TodoList
+        todos={mixedTodos}
+        editingId={null}
+        editValue=""
+        editCategories={defaultEditCategories}
+        isArchived={true}
+        onEdit={() => {}}
+        onSave={() => {}}
+        onCancel={() => {}}
+        onEditValueChange={() => {}}
+        onEditCategoryChange={() => {}}
+        onComplete={() => {}}
+        onDelete={() => {}}
+        onRestore={() => {}}
+      />
+    )
+    cy.get('.todo-item').should('have.length', 3)
+    cy.get('.todo-item.archived').should('have.length', 3)
+  })
+
+  it('handles zero todos with inactive state', () => {
+    cy.mount(
+      <TodoList
+        todos={[]}
+        editingId={null}
+        editValue=""
+        editCategories={defaultEditCategories}
+        isArchived={false}
+        onEdit={() => {}}
+        onSave={() => {}}
+        onCancel={() => {}}
+        onEditValueChange={() => {}}
+        onEditCategoryChange={() => {}}
+        onComplete={() => {}}
+        onDelete={() => {}}
+        onRestore={() => {}}
+      />
+    )
+    cy.get('.todo-count').should('contain', '0 incomplete todos')
+  })
+
+  it('handles zero todos with archived state', () => {
+    cy.mount(
+      <TodoList
+        todos={[]}
+        editingId={null}
+        editValue=""
+        editCategories={defaultEditCategories}
+        isArchived={true}
+        onEdit={() => {}}
+        onSave={() => {}}
+        onCancel={() => {}}
+        onEditValueChange={() => {}}
+        onEditCategoryChange={() => {}}
+        onComplete={() => {}}
+        onDelete={() => {}}
+        onRestore={() => {}}
+      />
+    )
+    cy.get('.todo-count').should('contain', '0 completed todos')
+  })
+
+  it('handles large number of todos', () => {
+    const manyTodos = Array.from({ length: 50 }, (_, i) => ({
+      id: `${i + 1}`,
+      text: `Todo ${i + 1}`,
+      categories: { priority: 'medium' }
+    }))
+
+    cy.mount(
+      <TodoList
+        todos={manyTodos}
+        editingId={null}
+        editValue=""
+        editCategories={defaultEditCategories}
+        isArchived={false}
+        onEdit={() => {}}
+        onSave={() => {}}
+        onCancel={() => {}}
+        onEditValueChange={() => {}}
+        onEditCategoryChange={() => {}}
+        onComplete={() => {}}
+        onDelete={() => {}}
+        onRestore={() => {}}
+      />
+    )
+    cy.get('.todo-count').should('contain', '50 incomplete todos')
+    cy.get('.todo-item').should('have.length', 50)
+  })
+
+  it('maintains editing state correctly across multiple todos', () => {
+    const todos = [
+      { id: '1', text: 'First', categories: {} },
+      { id: '2', text: 'Second', categories: {} },
+      { id: '3', text: 'Third', categories: {} }
+    ]
+
+    cy.mount(
+      <TodoList
+        todos={todos}
+        editingId="2"
+        editValue="Editing second"
+        editCategories={defaultEditCategories}
+        isArchived={false}
+        onEdit={() => {}}
+        onSave={() => {}}
+        onCancel={() => {}}
+        onEditValueChange={() => {}}
+        onEditCategoryChange={() => {}}
+        onComplete={() => {}}
+        onDelete={() => {}}
+        onRestore={() => {}}
+      />
+    )
+    // Only one edit input should be visible
+    cy.get('.edit-input').should('have.length', 1)
+    cy.get('.edit-input').should('have.value', 'Editing second')
+    // Other todos should show normal view
+    cy.contains('.todo-text', 'First').should('exist')
+    cy.contains('.todo-text', 'Third').should('exist')
+  })
+})
