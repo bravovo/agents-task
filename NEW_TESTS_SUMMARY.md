@@ -145,12 +145,12 @@ File: `cypress/component/ViewToggle.cy.jsx`
 5. `maintains correct active state during count updates` - Tests state persistence
 6. `handles counts with different magnitudes` - Tests various count scenarios
 7. `renders with correct CSS classes` - Tests class application
-8. `toggle buttons work with keyboard navigation (Tab)` - Tests Tab key
+8. `toggle buttons are keyboard focusable` - Tests focus on both buttons
 9. `toggle buttons work with keyboard activation (Enter)` - Tests Enter key
 
 **Coverage Improved:**
 - Large count handling
-- Keyboard navigation (Tab, Enter)
+- Keyboard focus management (Enter key activation)
 - State persistence during updates
 - Edge cases with zero/large counts
 

@@ -72,13 +72,15 @@ describe('Header Component - Edge Cases', () => {
   it('displays correct icon for undefined theme (defaults gracefully)', () => {
     cy.mount(<Header theme={undefined} onThemeToggle={() => {}} />)
     cy.get('.theme-toggle').should('exist')
-    cy.get('.theme-toggle').should('contain', '☀️') // Sun icon shown when theme is not 'light'
+    // When theme is undefined (not 'light'), sun icon is shown
+    cy.get('.theme-toggle').should('contain', '☀️')
   })
 
   it('displays correct icon for empty string theme', () => {
     cy.mount(<Header theme="" onThemeToggle={() => {}} />)
     cy.get('.theme-toggle').should('exist')
-    cy.get('.theme-toggle').should('contain', '☀️') // Sun icon shown when theme is not 'light'
+    // When theme is empty string (not 'light'), sun icon is shown
+    cy.get('.theme-toggle').should('contain', '☀️')
   })
 
   it('header maintains layout structure', () => {
