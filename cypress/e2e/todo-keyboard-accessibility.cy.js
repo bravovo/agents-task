@@ -10,7 +10,7 @@ describe('Todo App - Keyboard Navigation and Accessibility', () => {
     })
 
     it('should navigate through form elements with Tab key', () => {
-      cy.get('body').tab()
+      cy.get('body').type('{tab}')
       // Should focus on first interactive element
       cy.focused().should('exist')
     })

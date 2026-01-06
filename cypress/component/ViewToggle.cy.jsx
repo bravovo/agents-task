@@ -220,9 +220,9 @@ describe('ViewToggle Component - Edge Cases', () => {
         archiveCount={3} 
       />
     )
-    cy.get('body').tab()
+    cy.get('body').type('{tab}')
     cy.focused().should('contain', 'Active Todos (5)')
-    cy.focused().tab()
+    cy.focused().type('{tab}')
     cy.focused().should('contain', 'Archive (3)')
   })
 
