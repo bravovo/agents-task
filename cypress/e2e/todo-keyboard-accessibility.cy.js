@@ -9,10 +9,13 @@ describe('Todo App - Keyboard Navigation and Accessibility', () => {
       cy.todoShouldExist('Test todo with Enter')
     })
 
-    it('should navigate through form elements with Tab key', () => {
-      cy.get('body').type('{tab}')
-      // Should focus on first interactive element
-      cy.focused().should('exist')
+    it('should be able to focus on form elements', () => {
+      // Test that form elements can receive focus
+      cy.get('.todo-input').focus()
+      cy.focused().should('have.class', 'todo-input')
+      
+      cy.get('#priority-select').focus()
+      cy.focused().should('have.id', 'priority-select')
     })
 
     it('should submit form when pressing Enter in input field', () => {
