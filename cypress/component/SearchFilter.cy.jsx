@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import SearchFilter from '../../src/components/SearchFilter'
 import { categoryTypes } from '../../src/constants'
 
