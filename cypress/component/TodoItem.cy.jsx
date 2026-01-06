@@ -449,3 +449,216 @@ describe('TodoItem Component - Edit Mode', () => {
     cy.get('.edit-input').should('be.focused')
   })
 })
+
+describe('TodoItem Component - Edge Cases', () => {
+  it('renders todo without categories', () => {
+    const todoWithoutCategories = {
+      id: '1',
+      text: 'Todo without categories',
+      categories: null
+    }
+
+    cy.mount(
+      <TodoItem
+        todo={todoWithoutCategories}
+        isEditing={false}
+        editValue=""
+        editCategories={{}}
+        isArchived={false}
+        onEdit={() => {}}
+        onSave={() => {}}
+        onCancel={() => {}}
+        onEditValueChange={() => {}}
+        onEditCategoryChange={() => {}}
+        onComplete={() => {}}
+        onDelete={() => {}}
+        onRestore={() => {}}
+      />
+    )
+    cy.contains('Todo without categories').should('be.visible')
+    cy.get('.category-badge').should('not.exist')
+  })
+
+  it('renders todo with empty categories object', () => {
+    const todoWithEmptyCategories = {
+      id: '2',
+      text: 'Todo with empty categories',
+      categories: {}
+    }
+
+    cy.mount(
+      <TodoItem
+        todo={todoWithEmptyCategories}
+        isEditing={false}
+        editValue=""
+        editCategories={{}}
+        isArchived={false}
+        onEdit={() => {}}
+        onSave={() => {}}
+        onCancel={() => {}}
+        onEditValueChange={() => {}}
+        onEditCategoryChange={() => {}}
+        onComplete={() => {}}
+        onDelete={() => {}}
+        onRestore={() => {}}
+      />
+    )
+    cy.contains('Todo with empty categories').should('be.visible')
+    cy.get('.category-badge').should('not.exist')
+  })
+
+  it('renders todo with partial categories', () => {
+    const todoWithPartialCategories = {
+      id: '3',
+      text: 'Todo with only priority',
+      categories: {
+        priority: 'high'
+      }
+    }
+
+    cy.mount(
+      <TodoItem
+        todo={todoWithPartialCategories}
+        isEditing={false}
+        editValue=""
+        editCategories={{}}
+        isArchived={false}
+        onEdit={() => {}}
+        onSave={() => {}}
+        onCancel={() => {}}
+        onEditValueChange={() => {}}
+        onEditCategoryChange={() => {}}
+        onComplete={() => {}}
+        onDelete={() => {}}
+        onRestore={() => {}}
+      />
+    )
+    cy.contains('Todo with only priority').should('be.visible')
+    cy.get('.category-badge').should('have.length', 1)
+    cy.contains('.category-badge', 'High').should('exist')
+  })
+
+  it('handles unknown category type gracefully', () => {
+    const todoWithUnknownCategory = {
+      id: '4',
+      text: 'Todo with unknown category',
+      categories: {
+        priority: 'high',
+        unknownType: 'someValue'
+      }
+    }
+
+    cy.mount(
+      <TodoItem
+        todo={todoWithUnknownCategory}
+        isEditing={false}
+        editValue=""
+        editCategories={{}}
+        isArchived={false}
+        onEdit={() => {}}
+        onSave={() => {}}
+        onCancel={() => {}}
+        onEditValueChange={() => {}}
+        onEditCategoryChange={() => {}}
+        onComplete={() => {}}
+        onDelete={() => {}}
+        onRestore={() => {}}
+      />
+    )
+    cy.contains('Todo with unknown category').should('be.visible')
+    // Should only show the valid category (priority: high)
+    cy.get('.category-badge').should('have.length', 1)
+    cy.contains('.category-badge', 'High').should('exist')
+  })
+
+  it('handles category with invalid value', () => {
+    const todoWithInvalidValue = {
+      id: '5',
+      text: 'Todo with invalid category value',
+      categories: {
+        priority: 'invalid-priority',
+        time: 'today'
+      }
+    }
+
+    cy.mount(
+      <TodoItem
+        todo={todoWithInvalidValue}
+        isEditing={false}
+        editValue=""
+        editCategories={{}}
+        isArchived={false}
+        onEdit={() => {}}
+        onSave={() => {}}
+        onCancel={() => {}}
+        onEditValueChange={() => {}}
+        onEditCategoryChange={() => {}}
+        onComplete={() => {}}
+        onDelete={() => {}}
+        onRestore={() => {}}
+      />
+    )
+    cy.contains('Todo with invalid category value').should('be.visible')
+    // Should show both badges, with invalid value displayed as-is
+    cy.get('.category-badge').should('have.length', 2)
+  })
+
+  it('renders very long todo text correctly', () => {
+    const longText = 'This is a very long todo item text that should still render correctly in the component without breaking the layout or causing any display issues. It should wrap properly and remain readable.'
+    const todoWithLongText = {
+      id: '6',
+      text: longText,
+      categories: {
+        priority: 'medium'
+      }
+    }
+
+    cy.mount(
+      <TodoItem
+        todo={todoWithLongText}
+        isEditing={false}
+        editValue=""
+        editCategories={{}}
+        isArchived={false}
+        onEdit={() => {}}
+        onSave={() => {}}
+        onCancel={() => {}}
+        onEditValueChange={() => {}}
+        onEditCategoryChange={() => {}}
+        onComplete={() => {}}
+        onDelete={() => {}}
+        onRestore={() => {}}
+      />
+    )
+    cy.contains(longText).should('be.visible')
+  })
+
+  it('renders todo with special characters and emojis', () => {
+    const todoWithSpecialChars = {
+      id: '7',
+      text: 'Buy groceries 🛒 & cook dinner 🍝 (important!)',
+      categories: {
+        priority: 'high'
+      }
+    }
+
+    cy.mount(
+      <TodoItem
+        todo={todoWithSpecialChars}
+        isEditing={false}
+        editValue=""
+        editCategories={{}}
+        isArchived={false}
+        onEdit={() => {}}
+        onSave={() => {}}
+        onCancel={() => {}}
+        onEditValueChange={() => {}}
+        onEditCategoryChange={() => {}}
+        onComplete={() => {}}
+        onDelete={() => {}}
+        onRestore={() => {}}
+      />
+    )
+    cy.contains('Buy groceries 🛒 & cook dinner 🍝 (important!)').should('be.visible')
+  })
+})
